@@ -2,15 +2,17 @@ package com.spaghettyArts.projectakrasia.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity(name = "user")
 public class UserModel {
 
     @Id
+    @GeneratedValue
     public Integer id;
 
-    @Column(nullable = false, length = 50, unique = true)
+    @Column(nullable = false, length = 20, unique = true)
     public String username;
 
     @Column(nullable = false, length = 20)
