@@ -1,15 +1,16 @@
 package com.spaghettyArts.projectakrasia.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
-@Entity(name = "user")
-public class UserModel {
+@Entity
+@Table(name = "user")
+public class UserModel implements Serializable {
+    private static final long serialVersionUID = 1728921855521678658L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
     @Column(nullable = false, length = 20, unique = true)
@@ -19,6 +20,22 @@ public class UserModel {
     public String password;
 
 
+    /*
+    Construtores
+     */
+    public UserModel() {
+
+    }
+
+    public UserModel(Integer id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
+    /*
+        Getters e Setters
+         */
     public void setId(Integer id) {
         this.id = id;
     }
@@ -41,5 +58,22 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /*
+    Hash Code and equals
+     */
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserModel userModel = (UserModel) o;
+        return id.equals(userModel.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

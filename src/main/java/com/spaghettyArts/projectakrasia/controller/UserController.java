@@ -27,6 +27,10 @@ public class UserController {
         return ResponseEntity.ok().body(obj);
     }
 
-
+    @GetMapping(value = "/login")
+    public boolean findById(@RequestParam(value = "user") String user, @RequestParam(value = "pass") String pass) {
+        boolean test = service.login(user);
+        return test;
+    }
 
 }
