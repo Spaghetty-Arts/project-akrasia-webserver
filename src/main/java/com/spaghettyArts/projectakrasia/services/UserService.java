@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.spaghettyArts.projectakrasia.Utils.Encryption.checkPassword;
+import static com.spaghettyArts.projectakrasia.Utils.Encryption.hashPassword;
+
 @Service
 public class UserService {
 
@@ -25,7 +28,24 @@ public class UserService {
         return obj.get();
     }
 
-    public boolean login(String user) {
-        return repository.findUserModelByUsername(user) != null;
+    public boolean login(String user, String password) {
+        UserModel userE =  repository.findUserModelByUsername(user);
+        if (userE != null) {
+            String paswordH = userE.getPassword();
+            return checkPassword(password, paswordH);
+        } else {
+            return false;
+        }
+    }
+
+    public UserModel register(UserModel obj) {
+        String username = obj.getUsername();
+
+        String pass = obj.getPassword();
+        String hash = hashPassword(pass);
+
+        UserModel newUser = new UserModel(username, hash);
+        return repository.save(newUser);
+
     }
 }

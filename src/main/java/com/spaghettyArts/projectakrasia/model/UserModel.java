@@ -16,7 +16,7 @@ public class UserModel implements Serializable {
     @Column(nullable = false, length = 20, unique = true)
     public String username;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 60)
     public String password;
 
 
@@ -27,8 +27,7 @@ public class UserModel implements Serializable {
 
     }
 
-    public UserModel(Integer id, String username, String password) {
-        this.id = id;
+    public UserModel(String username, String password) {
         this.username = username;
         this.password = password;
     }
