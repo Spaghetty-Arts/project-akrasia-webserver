@@ -28,24 +28,30 @@ public class UserService {
         return obj.get();
     }
 
-    public boolean login(String user, String password) {
+    public UserModel login(String user, String password) {
         UserModel userE =  repository.findUserModelByUsername(user);
         if (userE != null) {
             String paswordH = userE.getPassword();
-            return checkPassword(password, paswordH);
+            if(checkPassword(password, paswordH)) {
+                return userE;
+            } else
+                return null;
         } else {
-            return false;
+            return null;
         }
     }
 
     public UserModel register(UserModel obj) {
         String username = obj.getUsername();
+        UserModel userE =  repository.findUserModelByUsername(username);
+        if (userE != null) {
+            return null;
+        } else {
+            String pass = obj.getPassword();
+            String hash = hashPassword(pass);
 
-        String pass = obj.getPassword();
-        String hash = hashPassword(pass);
-
-        UserModel newUser = new UserModel(username, hash);
-        return repository.save(newUser);
-
+            UserModel newUser = new UserModel(username, hash);
+            return repository.save(newUser);
+        }
     }
 }

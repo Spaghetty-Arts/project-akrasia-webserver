@@ -28,14 +28,22 @@ public class UserController {
     }
 
     @GetMapping(value = "/login")
-    public boolean findById(@RequestParam(value = "user") String user, @RequestParam(value = "pass") String pass) {
-        boolean test = service.login(user, pass);
-        return test;
+    public ResponseEntity<UserModel> findById(@RequestParam(value = "user") String user, @RequestParam(value = "pass") String pass) {
+        UserModel obj = service.login(user, pass);
+        if (obj == null) {
+            return ResponseEntity.status(401).build();
+        } else {
+            return ResponseEntity.ok().body(obj);
+        }
     }
 
     @PostMapping(value = "/register")
     public ResponseEntity<UserModel> insert(@RequestBody UserModel user) {
         UserModel obj = service.register(user);
-        return ResponseEntity.ok().body(obj);
+        if (obj == null) {
+            return ResponseEntity.status(409).build();
+        } else {
+            return ResponseEntity.ok().body(obj);
+        }
     }
 }
