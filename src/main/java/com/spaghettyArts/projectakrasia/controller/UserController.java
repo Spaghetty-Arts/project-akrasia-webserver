@@ -1,6 +1,7 @@
 package com.spaghettyArts.projectakrasia.controller;
 
 import com.spaghettyArts.projectakrasia.model.UserModel;
+import com.spaghettyArts.projectakrasia.services.NotificationService;
 import com.spaghettyArts.projectakrasia.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,9 @@ public class UserController {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private NotificationService mail;
 
     @GetMapping(path = "/list")
     public ResponseEntity<List<UserModel>> findAll() {
@@ -43,6 +47,7 @@ public class UserController {
         if (obj == null) {
             return ResponseEntity.status(409).build();
         } else {
+            mail.sendNotification(obj);
             return ResponseEntity.ok().body(obj);
         }
     }

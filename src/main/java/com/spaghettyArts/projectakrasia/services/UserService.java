@@ -49,7 +49,6 @@ public class UserService {
         } else {
             String pass = obj.getPassword();
             String hash = hashPassword(pass);
-
             UserModel newUser = new UserModel(username, hash, obj.getEmail());
             return repository.save(newUser);
         }
