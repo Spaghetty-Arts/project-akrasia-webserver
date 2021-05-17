@@ -26,4 +26,14 @@ public class NotificationService {
 
         javaMailSender.send(mail);
     }
+
+    public void resetNotification(String email) throws MailException {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(email);
+        mail.setFrom("spaghettiarts.projectakrasia@gmail.com");
+        mail.setSubject("Reset Password");
+        mail.setText("Foi pedido um reset de password");
+
+        javaMailSender.send(mail);
+    }
 }

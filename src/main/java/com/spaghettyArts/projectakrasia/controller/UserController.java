@@ -32,8 +32,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/login")
-    public ResponseEntity<UserModel> findById(@RequestParam(value = "user") String user, @RequestParam(value = "pass") String pass) {
-        UserModel obj = service.login(user, pass);
+    public ResponseEntity<UserModel> findPlayer(@RequestParam(value = "email") String email, @RequestParam(value = "pass") String pass) {
+        UserModel obj = service.login(email, pass);
         if (obj == null) {
             return ResponseEntity.status(401).build();
         } else {
@@ -51,4 +51,17 @@ public class UserController {
             return ResponseEntity.ok().body(obj);
         }
     }
+
+    @PutMapping(value = "/reset")
+    public ResponseEntity<UserModel> sendMail(@RequestParam(value = "email") String email, @RequestParam(value = "pass") String pass) {
+        UserModel obj = service.reset(email, pass);
+        if (obj == null) {
+            return ResponseEntity.status(409).build();
+        } else {
+            mail.resetNotification(email);
+            return ResponseEntity.ok().body(obj);
+        }
+    }
+
+
 }

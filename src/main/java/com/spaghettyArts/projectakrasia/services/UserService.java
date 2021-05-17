@@ -28,8 +28,8 @@ public class UserService {
         return obj.get();
     }
 
-    public UserModel login(String user, String password) {
-        UserModel userE =  repository.findUserModelByUsername(user);
+    public UserModel login(String email, String password) {
+        UserModel userE =  repository.findUserModelByEmail(email);
         if (userE != null) {
             String paswordH = userE.getPassword();
             if(checkPassword(password, paswordH)) {
@@ -42,15 +42,28 @@ public class UserService {
     }
 
     public UserModel register(UserModel obj) {
-        String username = obj.getUsername();
-        UserModel userE =  repository.findUserModelByUsername(username);
-        if (userE != null) {
+        UserModel objU =  repository.findUserModelByUsername(obj.getUsername());
+        UserModel objE =  repository.findUserModelByEmail(obj.getEmail());
+        if (objE!= null || objU != null) {
             return null;
         } else {
             String pass = obj.getPassword();
             String hash = hashPassword(pass);
-            UserModel newUser = new UserModel(username, hash, obj.getEmail());
+            UserModel newUser = new UserModel(obj.getUsername(), hash, obj.getEmail());
             return repository.save(newUser);
         }
     }
+
+    public UserModel reset(String email, String password) {
+        UserModel objE =  repository.findUserModelByEmail(email);
+        if (objE == null) {
+            return null;
+        } else {
+            String pass = password;
+            String hash = hashPassword(pass);
+            objE.setPassword(hash);
+            return repository.save(objE);
+        }
+    }
+
 }
