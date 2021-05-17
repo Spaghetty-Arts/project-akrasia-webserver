@@ -19,6 +19,10 @@ public class UserModel implements Serializable {
     @Column(nullable = false, length = 60)
     public String password;
 
+    @Column(nullable = false, length = 60, unique = true)
+    public String email;
+
+
 
     /*
     Construtores
@@ -30,6 +34,12 @@ public class UserModel implements Serializable {
     public UserModel(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public UserModel(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
     /*
@@ -57,6 +67,14 @@ public class UserModel implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /*
