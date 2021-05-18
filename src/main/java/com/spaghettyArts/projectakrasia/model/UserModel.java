@@ -11,17 +11,20 @@ public class UserModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    @Column(name = "id")
+    private Integer id;
 
-    @Column(nullable = false, length = 20, unique = true)
-    public String username;
+    @Column(name = "username", nullable = false, length = 20, unique = true)
+    private String username;
 
-    @Column(nullable = false, length = 60)
-    public String password;
+    @Column(name = "password", nullable = false, length = 60)
+    private String password;
 
-    @Column(nullable = false, length = 60, unique = true)
-    public String email;
+    @Column(name = "email", nullable = false, length = 60, unique = true)
+    private String email;
 
+    @OneToOne(mappedBy = "user")
+    private ResetModel resetModel;
 
 
     /*
@@ -75,6 +78,14 @@ public class UserModel implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public ResetModel getResetModel() {
+        return resetModel;
+    }
+
+    public void setResetModel(ResetModel resetModel) {
+        this.resetModel = resetModel;
     }
 
     /*
