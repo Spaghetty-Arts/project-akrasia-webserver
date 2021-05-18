@@ -52,7 +52,7 @@ public class UserController {
         if (obj == null) {
             return ResponseEntity.status(409).build();
         } else {
-            mail.sendNotification(obj);
+            mail.prepareAndSend(obj);
             return ResponseEntity.ok().body(obj);
         }
     }
@@ -64,7 +64,7 @@ public class UserController {
             return ResponseEntity.status(409).build();
         } else {
             String link = "http://localhost:8080/resetPassword?token=" + obj.getToken();
-            mail.resetNotification(email, link);
+            //mail.resetNotification(email, link);
             return ResponseEntity.ok().body(obj);
         }
     }
