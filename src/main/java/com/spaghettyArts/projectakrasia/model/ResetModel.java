@@ -1,5 +1,7 @@
 package com.spaghettyArts.projectakrasia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,12 +22,17 @@ public class ResetModel implements Serializable {
     @Column(name = "token", nullable = false, length = 60, unique = true)
     public String token;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserModel user;
 
     public ResetModel() {
 
+    }
+
+    public ResetModel(String email, String token) {
+        this.email = email;
+        this.token = token;
     }
 
     public ResetModel( String token, UserModel user) {

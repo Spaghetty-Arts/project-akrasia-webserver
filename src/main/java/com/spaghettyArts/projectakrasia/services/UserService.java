@@ -1,6 +1,8 @@
 package com.spaghettyArts.projectakrasia.services;
 
+import com.spaghettyArts.projectakrasia.model.ResetModel;
 import com.spaghettyArts.projectakrasia.model.UserModel;
+import com.spaghettyArts.projectakrasia.repository.ResetRepository;
 import com.spaghettyArts.projectakrasia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +20,9 @@ public class UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private ResetRepository resetRepository;
 
     public List<UserModel> findAll() {
         return repository.findAll();
@@ -54,16 +59,17 @@ public class UserService {
         }
     }
 
-    public UserModel reset(String email, String password) {
-        UserModel objE =  repository.findUserModelByEmail(email);
-        if (objE == null) {
+    public UserModel reset(String token, String email, String password) {
+        ResetModel obj = resetRepository.findByTokenAndEmail(token, email);
+        if (obj == null) {
             return null;
         } else {
+            resetRepository.delete(obj);
+            UserModel userObj = repository.findUserModelByEmail(email);
             String pass = password;
             String hash = hashPassword(pass);
-            objE.setPassword(hash);
-            return repository.save(objE);
+            userObj.setPassword(hash);
+            return repository.save(userObj);
         }
     }
-
 }

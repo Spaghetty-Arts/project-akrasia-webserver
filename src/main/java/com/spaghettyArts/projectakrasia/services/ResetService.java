@@ -5,6 +5,7 @@ import com.spaghettyArts.projectakrasia.model.ResetModel;
 import com.spaghettyArts.projectakrasia.model.UserModel;
 import com.spaghettyArts.projectakrasia.repository.ResetRepository;
 import com.spaghettyArts.projectakrasia.repository.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,4 +24,5 @@ public class ResetService {
         ResetModel reset = new ResetModel(token, obj);
         return repository.save(reset);
     }
+
 }

@@ -1,5 +1,7 @@
 package com.spaghettyArts.projectakrasia.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -23,6 +25,7 @@ public class UserModel implements Serializable {
     @Column(name = "email", nullable = false, length = 60, unique = true)
     private String email;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user")
     private ResetModel resetModel;
 

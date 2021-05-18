@@ -52,7 +52,7 @@ public class UserController {
         if (obj == null) {
             return ResponseEntity.status(409).build();
         } else {
-            mail.sendNotification(obj);
+          //  mail.sendNotification(obj);
             return ResponseEntity.ok().body(obj);
         }
     }
