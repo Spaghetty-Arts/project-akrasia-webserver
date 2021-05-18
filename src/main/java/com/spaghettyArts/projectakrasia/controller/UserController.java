@@ -52,18 +52,19 @@ public class UserController {
         if (obj == null) {
             return ResponseEntity.status(409).build();
         } else {
-          //  mail.sendNotification(obj);
+            mail.sendNotification(obj);
             return ResponseEntity.ok().body(obj);
         }
     }
 
-    @PutMapping(value = "/reset")
+    @GetMapping(value = "/reset")
     public ResponseEntity<ResetModel> sendMail(@RequestParam(value = "email") String email) {
         ResetModel obj = reset.resetRequest(email);
         if (obj == null) {
             return ResponseEntity.status(409).build();
         } else {
-            //mail.resetNotification(email);
+            String link = "http://localhost:8080/resetPassword?token=" + obj.getToken();
+            mail.resetNotification(email, link);
             return ResponseEntity.ok().body(obj);
         }
     }

@@ -27,12 +27,12 @@ public class NotificationService {
         javaMailSender.send(mail);
     }
 
-    public void resetNotification(String email) throws MailException {
+    public void resetNotification(String email, String link) throws MailException {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
         mail.setFrom("spaghettiarts.projectakrasia@gmail.com");
         mail.setSubject("Reset Password");
-        mail.setText("Foi pedido um reset de password");
+        mail.setText("Foi pedido um reset de password " + link);
 
         javaMailSender.send(mail);
     }
