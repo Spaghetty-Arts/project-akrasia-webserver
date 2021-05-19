@@ -1,9 +1,11 @@
 package com.spaghettyArts.projectakrasia.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
@@ -21,6 +23,10 @@ public class ResetModel implements Serializable {
 
     @Column(name = "token", nullable = false, length = 60, unique = true)
     public String token;
+
+    @CreationTimestamp
+    @Column(name = "request_date")
+    public Timestamp request_date;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -71,6 +77,14 @@ public class ResetModel implements Serializable {
 
     public void setUser(UserModel userModel) {
         this.user = userModel;
+    }
+
+    public Timestamp getRequest_date() {
+        return request_date;
+    }
+
+    public void setRequest_date(Timestamp request_date) {
+        this.request_date = request_date;
     }
 
     @Override
