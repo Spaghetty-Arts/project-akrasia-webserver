@@ -22,4 +22,11 @@ public class MailContentService {
         return templateEngine.process("welcomeMail", context);
     }
 
+    public String buildReset(String name, String link) {
+        Context context = new Context();
+        context.setVariable("message", name);
+        context.setVariable("link", link);
+        return templateEngine.process("resetMail", context);
+    }
+
 }

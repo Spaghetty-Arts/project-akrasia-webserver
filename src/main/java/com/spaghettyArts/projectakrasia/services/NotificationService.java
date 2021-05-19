@@ -37,4 +37,19 @@ public class NotificationService {
         }
     }
 
+    public void prepareAndSendReset(UserModel obj, String link) {
+        MimeMessagePreparator messagePreparator = mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setFrom("spaghettiarts.projectakrasia@gmail.com");
+            messageHelper.setTo(obj.getEmail());
+            messageHelper.setSubject("Reset da Password");
+            String content = mailContentBuilder.buildReset(obj.getUsername(), link);
+            messageHelper.setText(content, true);
+        };
+        try {
+            mailSender.send(messagePreparator);
+        } catch (MailException e) {
+            // runtime exception; compiler will not force you to handle it
+        }
+    }
 }

@@ -33,6 +33,10 @@ public class UserService {
         return obj.get();
     }
 
+    public UserModel findByMail (String mail) {
+        return repository.findUserModelByEmail(mail);
+    }
+
     public UserModel login(String email, String password) {
         UserModel userE =  repository.findUserModelByEmail(email);
         if (userE != null) {

@@ -63,8 +63,9 @@ public class UserController {
         if (obj == null) {
             return ResponseEntity.status(409).build();
         } else {
+            UserModel user = service.findByMail(email);
             String link = "http://localhost:8080/resetPassword?token=" + obj.getToken();
-            //mail.resetNotification(email, link);
+            mail.prepareAndSendReset(user, link);
             return ResponseEntity.ok().body(obj);
         }
     }
