@@ -5,8 +5,6 @@ import com.spaghettyArts.projectakrasia.model.UserModel;
 import com.spaghettyArts.projectakrasia.repository.ResetRepository;
 import com.spaghettyArts.projectakrasia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.Optional;
 
 import static com.spaghettyArts.projectakrasia.Utils.Encryption.checkPassword;
 import static com.spaghettyArts.projectakrasia.Utils.Encryption.hashPassword;
+import static com.spaghettyArts.projectakrasia.Utils.InputValidation.*;
 
 @Service
 public class UserService {
@@ -38,6 +37,10 @@ public class UserService {
     }
 
     public UserModel login(String email, String password) {
+        if(checkEmpty(email) || checkEmpty(password)) {
+            return null;
+        }
+
         UserModel userE =  repository.findUserModelByEmail(email);
         if (userE != null) {
             String paswordH = userE.getPassword();
@@ -51,6 +54,8 @@ public class UserService {
     }
 
     public UserModel register(UserModel obj) {
+
+
         UserModel objU =  repository.findUserModelByUsername(obj.getUsername());
         UserModel objE =  repository.findUserModelByEmail(obj.getEmail());
         if (objE!= null || objU != null) {
@@ -64,6 +69,9 @@ public class UserService {
     }
 
     public UserModel reset(String token, String email, String password) {
+        if (checkEmpty(email) || checkEmpty(password) || checkEmpty(token)) {
+            return null;
+        }
         ResetModel obj = resetRepository.findByTokenAndEmail(token, email);
         if (obj == null) {
             return null;

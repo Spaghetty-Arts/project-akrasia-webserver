@@ -65,7 +65,7 @@ public class UserController {
         } else {
             UserModel user = service.findByMail(email);
             String link = "http://localhost:8080/resetPassword?token=" + obj.getToken();
-            //mail.prepareAndSendReset(user, link);
+            mail.prepareAndSendReset(user, link);
             return ResponseEntity.ok().body(obj);
         }
     }

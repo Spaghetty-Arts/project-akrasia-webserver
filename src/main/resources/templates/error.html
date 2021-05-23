@@ -11,7 +11,6 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <script th:src="@{/js/validation.js}"></script>
 </head>
 <body class="bg vertical-center">
 <div class="container">
@@ -21,31 +20,10 @@
                 <div class="panel-body">
                     <div class="text-center">
                         <h3><i class="fa fa-lock fa-4x"></i></h3>
-                        <h2 class="text-center">Forgot Password?</h2>
-                        <p>You can reset your password here.</p>
+                        <h2 class="text-center">Erro!</h2>
                         <div class="panel-body">
 
-                            <form name="formR" action="#" th:action="@{/resetPassword(token=${token})}" th:object="${reset}" method="post" onsubmit="return validateForm()">
-
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="container">
-                                            <div class="row">
-                                                <input id="email" name="email" placeholder="email address" class="form-control"  type="email"  th:field="*{email}" autocomplete="off">
-                                            </div>
-                                            <div class="row pt-4">
-                                                <input id="password" name="password" placeholder="password" class="form-control"  type="password"  th:field="*{password}" autocomplete="off">
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <p><input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit" /></p>
-                                </div>
-
-
-                            </form>
+                            <p>Ocorreu um erro. Por favor volte mais tarde</p>
                         </div>
                     </div>
                 </div>

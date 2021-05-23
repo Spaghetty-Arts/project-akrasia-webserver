@@ -2,6 +2,7 @@ package com.spaghettyArts.projectakrasia.controller;
 
 import com.spaghettyArts.projectakrasia.model.ResetFormModel;
 import com.spaghettyArts.projectakrasia.model.ResetModel;
+import com.spaghettyArts.projectakrasia.model.UserModel;
 import com.spaghettyArts.projectakrasia.services.NotificationService;
 import com.spaghettyArts.projectakrasia.services.ResetService;
 import com.spaghettyArts.projectakrasia.services.UserService;
@@ -32,7 +33,10 @@ public class ResetController {
 
     @PostMapping("/resetPassword")
     public String greetingSubmit(@RequestParam(value = "token") String token, @ModelAttribute ResetFormModel reset, Model model) {
-        service.reset(token, reset.getEmail(), reset.getPassword());
+        UserModel user = service.reset(token, reset.getEmail(), reset.getPassword());
+        if(user ==  null) {
+            return "error";
+        }
         model.addAttribute("reset", reset);
         return "result";
     }
