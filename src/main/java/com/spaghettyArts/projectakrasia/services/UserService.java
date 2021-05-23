@@ -84,4 +84,16 @@ public class UserService {
             return repository.save(userObj);
         }
     }
+
+    public UserModel changeName(int id, String username) {
+        if(checkEmpty(username)) {
+            return null;
+        }
+        UserModel obj = findByID(id);
+        if (obj == null) {
+            return null;
+        }
+        obj.setUsername(username);
+        return repository.save(obj);
+    }
 }

@@ -71,4 +71,12 @@ public class UserController {
     }
 
 
+    @PutMapping(value = "/changeName")
+    public ResponseEntity<UserModel> changeName(@RequestParam(value = "id") int id,@RequestParam(value = "user") String user) {
+        UserModel obj = service.changeName(id, user);
+        if (obj == null) {
+            return ResponseEntity.status(403).build();
+        }
+        return ResponseEntity.ok().body(obj);
+    }
 }
