@@ -7,12 +7,16 @@ import com.spaghettyArts.projectakrasia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.spaghettyArts.projectakrasia.Utils.DateValidation.updateLogin;
 import static com.spaghettyArts.projectakrasia.Utils.Encryption.checkPassword;
 import static com.spaghettyArts.projectakrasia.Utils.Encryption.hashPassword;
-import static com.spaghettyArts.projectakrasia.Utils.InputValidation.*;
+import static com.spaghettyArts.projectakrasia.Utils.InputValidation.checkEmpty;
 
 @Service
 public class UserService {
@@ -45,7 +49,8 @@ public class UserService {
         if (userE != null) {
             String paswordH = userE.getPassword();
             if(checkPassword(password, paswordH)) {
-                return userE;
+                UserModel obj = updateLogin(userE);
+                return repository.save(obj);
             } else
                 return null;
         } else {
@@ -64,7 +69,14 @@ public class UserService {
             String pass = obj.getPassword();
             String hash = hashPassword(pass);
             UserModel newUser = new UserModel(obj.getUsername(), hash, obj.getEmail());
-            return repository.save(newUser);
+            String defaultTime = "1970-01-01";
+            try {
+                Date defDate = new SimpleDateFormat("yyyy-MM-dd").parse(defaultTime);
+                newUser.setLast_login(defDate);
+                return repository.save(newUser);
+            } catch (ParseException t) {
+                return null;
+            }
         }
     }
 
@@ -96,4 +108,5 @@ public class UserService {
         obj.setUsername(username);
         return repository.save(obj);
     }
+
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +25,18 @@ public class UserModel implements Serializable {
 
     @Column(name = "email", nullable = false, length = 60, unique = true)
     private String email;
+
+    @Column(name = "money", nullable = false)
+    private Integer money;
+
+    @Column(name = "life", nullable = false)
+    private Integer life;
+
+    @Column(name = "last_login", nullable = false)
+    private Date last_login;
+
+    @Column(name = "login_reward", nullable = false)
+    private Integer login_reward;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user")
@@ -46,6 +59,9 @@ public class UserModel implements Serializable {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.money = 100;
+        this.life = 100;
+        this.login_reward = 0;
     }
 
     /*
@@ -89,6 +105,38 @@ public class UserModel implements Serializable {
 
     public void setResetModel(ResetModel resetModel) {
         this.resetModel = resetModel;
+    }
+
+    public Integer getMoney() {
+        return money;
+    }
+
+    public void setMoney(Integer money) {
+        this.money = money;
+    }
+
+    public Integer getLife() {
+        return life;
+    }
+
+    public void setLife(Integer life) {
+        this.life = life;
+    }
+
+    public Date getLast_login() {
+        return last_login;
+    }
+
+    public void setLast_login(Date last_login) {
+        this.last_login = last_login;
+    }
+
+    public Integer getLogin_reward() {
+        return login_reward;
+    }
+
+    public void setLogin_reward(Integer login_reward) {
+        this.login_reward = login_reward;
     }
 
     /*

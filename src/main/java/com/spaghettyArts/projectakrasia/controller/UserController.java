@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok().body(obj);
     }
 
-    @GetMapping(value = "/login")
+    @PutMapping(value = "/login")
     public ResponseEntity<UserModel> findPlayer(@RequestParam(value = "email") String email, @RequestParam(value = "pass") String pass) {
         UserModel obj = service.login(email, pass);
         if (obj == null) {
@@ -57,7 +57,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/reset")
+    @PostMapping(value = "/reset")
     public ResponseEntity<ResetModel> sendMail(@RequestParam(value = "email") String email) {
         ResetModel obj = reset.resetRequest(email);
         if (obj == null) {
@@ -65,7 +65,7 @@ public class UserController {
         } else {
             UserModel user = service.findByMail(email);
             String link = "http://localhost:8080/resetPassword?token=" + obj.getToken();
-            mail.prepareAndSendReset(user, link);
+           // mail.prepareAndSendReset(user, link);
             return ResponseEntity.ok().body(obj);
         }
     }

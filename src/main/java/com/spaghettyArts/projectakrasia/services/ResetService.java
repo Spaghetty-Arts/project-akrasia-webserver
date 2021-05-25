@@ -23,6 +23,11 @@ public class ResetService {
         if(checkEmpty(email)) {
             return null;
         }
+        ResetModel objRes = repository.findByEmail(email);
+        if(objRes != null) {
+            return null;
+        }
+
         UserModel obj= userRpo.findUserModelByEmail(email);
         String token = RandomString.randomString(60);
         ResetModel reset = new ResetModel(token, obj);
