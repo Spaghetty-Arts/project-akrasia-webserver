@@ -79,4 +79,9 @@ public class UserController {
         }
         return ResponseEntity.ok().body(obj);
     }
+
+    @PutMapping(value = "/changeStats")
+    public ResponseEntity<UserModel> changeStats(@PathVariable Integer id) {
+        return ResponseEntity.ok().build();
+    }
 }

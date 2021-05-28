@@ -25,7 +25,7 @@ public class DateValidation {
         } else {
             obj.setLogin_reward(0);
         }
-
+        obj.setLast_login(now);
        return obj;
     }
 }

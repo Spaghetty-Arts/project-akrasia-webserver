@@ -109,4 +109,13 @@ public class UserService {
         return repository.save(obj);
     }
 
+    public UserModel changeStats(int id, int life, int money) {
+        UserModel obj = findByID(id);
+        if (obj == null) {
+            return null;
+        }
+        obj.setLife(life);
+        obj.setMoney(money);
+        return repository.save(obj);
+    }
 }
