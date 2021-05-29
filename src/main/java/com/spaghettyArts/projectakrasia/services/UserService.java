@@ -5,6 +5,7 @@ import com.spaghettyArts.projectakrasia.model.UserModel;
 import com.spaghettyArts.projectakrasia.repository.ResetRepository;
 import com.spaghettyArts.projectakrasia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -13,10 +14,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.spaghettyArts.projectakrasia.Utils.DateValidation.updateLogin;
-import static com.spaghettyArts.projectakrasia.Utils.Encryption.checkPassword;
-import static com.spaghettyArts.projectakrasia.Utils.Encryption.hashPassword;
-import static com.spaghettyArts.projectakrasia.Utils.InputValidation.checkEmpty;
+import static com.spaghettyArts.projectakrasia.utils.DateValidation.updateLogin;
+import static com.spaghettyArts.projectakrasia.utils.Encryption.checkPassword;
+import static com.spaghettyArts.projectakrasia.utils.Encryption.hashPassword;
+import static com.spaghettyArts.projectakrasia.utils.InputValidation.checkEmpty;
+import static com.spaghettyArts.projectakrasia.utils.RandomString.randomString;
 
 @Service
 public class UserService {
@@ -40,9 +42,9 @@ public class UserService {
         return repository.findUserModelByEmail(mail);
     }
 
-    public UserModel login(String email, String password) {
+    public ResponseEntity<UserModel> login(String email, String password) {
         if(checkEmpty(email) || checkEmpty(password)) {
-            return null;
+            return ResponseEntity.badRequest().build();
         }
 
         UserModel userE =  repository.findUserModelByEmail(email);
@@ -50,16 +52,21 @@ public class UserService {
             String paswordH = userE.getPassword();
             if(checkPassword(password, paswordH)) {
                 UserModel obj = updateLogin(userE);
-                return repository.save(obj);
+
+                obj.setUser_online(1);
+                String token = randomString(60);
+                obj.setUser_token(token);
+
+                repository.save(obj);
+                return ResponseEntity.ok().body(obj);
             } else
-                return null;
+                return ResponseEntity.status(403).build();
         } else {
-            return null;
+            return ResponseEntity.notFound().build();
         }
     }
 
     public UserModel register(UserModel obj) {
-
 
         UserModel objU =  repository.findUserModelByUsername(obj.getUsername());
         UserModel objE =  repository.findUserModelByEmail(obj.getEmail());
@@ -117,5 +124,44 @@ public class UserService {
         obj.setLife(life);
         obj.setMoney(money);
         return repository.save(obj);
+    }
+
+    public ResponseEntity<Object> gotReward(int id, int reward) {
+        UserModel obj = findByID(id);
+        if (obj == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (obj.getGot_reward() == 1) {
+            return ResponseEntity.status(403).build();
+        }
+        obj.setGot_reward(1);
+        obj.setMoney(reward);
+
+        Date now = new Date();
+        obj.setLast_login(now);
+
+        repository.save(obj);
+        return ResponseEntity.ok().build();
+    }
+
+    public UserModel logout(int id) {
+        UserModel obj = findByID(id);
+        if (obj == null) {
+            return null;
+        }
+
+        obj.setUser_online(0);
+        obj.setUser_token(null);
+
+        return repository.save(obj);
+    }
+
+    public boolean validateUser(String token, int id) {
+        UserModel obj = findByID(id);
+        if (obj  == null) {
+            return false;
+        } else {
+            return obj.getUser_token().equals(token) && obj.getUser_online() == 1;
+        }
     }
 }

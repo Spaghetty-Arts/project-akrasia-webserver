@@ -38,6 +38,15 @@ public class UserModel implements Serializable {
     @Column(name = "login_reward", nullable = false)
     private Integer login_reward;
 
+    @Column(name = "got_reward", nullable = false)
+    private Integer got_reward;
+
+    @Column(name = "active", nullable = false)
+    private Integer user_online;
+
+    @Column(name = "token")
+    private String user_token;
+
     @JsonIgnore
     @OneToOne(mappedBy = "user")
     private ResetModel resetModel;
@@ -50,18 +59,15 @@ public class UserModel implements Serializable {
 
     }
 
-    public UserModel(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
     public UserModel(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.money = 100;
         this.life = 100;
+        this.got_reward = 0;
         this.login_reward = 0;
+        this.user_online = 0;
     }
 
     /*
@@ -137,6 +143,30 @@ public class UserModel implements Serializable {
 
     public void setLogin_reward(Integer login_reward) {
         this.login_reward = login_reward;
+    }
+
+    public Integer getGot_reward() {
+        return got_reward;
+    }
+
+    public void setGot_reward(Integer got_reward) {
+        this.got_reward = got_reward;
+    }
+
+    public Integer getUser_online() {
+        return user_online;
+    }
+
+    public void setUser_online(Integer user_online) {
+        this.user_online = user_online;
+    }
+
+    public String getUser_token() {
+        return user_token;
+    }
+
+    public void setUser_token(String user_token) {
+        this.user_token = user_token;
     }
 
     /*

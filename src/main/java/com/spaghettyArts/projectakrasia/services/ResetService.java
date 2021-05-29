@@ -1,6 +1,6 @@
 package com.spaghettyArts.projectakrasia.services;
 
-import com.spaghettyArts.projectakrasia.Utils.RandomString;
+import com.spaghettyArts.projectakrasia.utils.RandomString;
 import com.spaghettyArts.projectakrasia.model.ResetModel;
 import com.spaghettyArts.projectakrasia.model.UserModel;
 import com.spaghettyArts.projectakrasia.repository.ResetRepository;
@@ -8,7 +8,7 @@ import com.spaghettyArts.projectakrasia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.spaghettyArts.projectakrasia.Utils.InputValidation.checkEmpty;
+import static com.spaghettyArts.projectakrasia.utils.InputValidation.checkEmpty;
 
 @Service
 public class ResetService {

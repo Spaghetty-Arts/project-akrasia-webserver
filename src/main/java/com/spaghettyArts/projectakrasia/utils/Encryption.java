@@ -1,4 +1,4 @@
-package com.spaghettyArts.projectakrasia.Utils;
+package com.spaghettyArts.projectakrasia.utils;
 
 
 import org.mindrot.jbcrypt.BCrypt;

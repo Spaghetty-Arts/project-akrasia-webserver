@@ -1,4 +1,4 @@
-package com.spaghettyArts.projectakrasia.Utils;
+package com.spaghettyArts.projectakrasia.utils;
 
 import com.spaghettyArts.projectakrasia.model.UserModel;
 
@@ -22,8 +22,13 @@ public class DateValidation {
         if (dayN - dayO == 1) {
             int row = obj.getLogin_reward();
             obj.setLogin_reward(row+1);
+            obj.setGot_reward(0);
+        } else if (dayN - dayO == 0) {
+            obj.setLast_login(now);
+            return obj;
         } else {
-            obj.setLogin_reward(0);
+            obj.setLogin_reward(1);
+            obj.setGot_reward(0);
         }
         obj.setLast_login(now);
        return obj;
