@@ -124,6 +124,7 @@ public class UserService {
         if (life <= 10 && life > obj.getLife()) {
             obj.setLife(life);
             obj.setMoney(money);
+            obj.setLast_login(new Date());
             repository.save(obj);
             return ResponseEntity.ok().build();
         }
