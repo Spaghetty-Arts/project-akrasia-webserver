@@ -40,14 +40,13 @@ public class UserController {
         return ResponseEntity.ok().body(obj);
     }
 
-    @PutMapping(value = "/changeStats")
-    public ResponseEntity<UserModel> changeStats(@RequestBody UserModel user) {
+    @PutMapping(value = "/updateArmor")
+    public ResponseEntity<Object> changeStats(@RequestBody UserModel user) {
         if (!service.validateUser(user.getUser_token(), user.getId())) {
             return ResponseEntity.status(401).build();
         }
 
-        service.changeStats(user.getId(), user.getLife(), user.getMoney());
-        return ResponseEntity.ok().build();
+        return service.changeStats(user.getId(), user.getLife(), user.getMoney());
     }
 
     //reviewed and good

@@ -29,7 +29,7 @@ public class UserModel implements Serializable {
     @Column(name = "money", nullable = false)
     private Integer money;
 
-    @Column(name = "life", nullable = false)
+    @Column(name = "armor_level", nullable = false)
     private Integer life;
 
     @Column(name = "last_login", nullable = false)
@@ -47,6 +47,15 @@ public class UserModel implements Serializable {
     @Column(name = "token")
     private String user_token;
 
+    @Column(name = "winP", nullable = false)
+    private Integer win;
+
+    @Column(name = "loseP", nullable = false)
+    private Integer lose;
+
+    @Column(name = "rankP", nullable = false)
+    private Integer rank;
+
     @JsonIgnore
     @OneToOne(mappedBy = "user")
     private ResetModel resetModel;
@@ -63,11 +72,14 @@ public class UserModel implements Serializable {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.money = 100;
-        this.life = 100;
+        this.money = 0;
+        this.life = 1;
         this.got_reward = 0;
         this.login_reward = 0;
         this.user_online = 0;
+        this.win = 0;
+        this.lose = 0;
+        this.rank = 1;
     }
 
     /*
@@ -168,6 +180,31 @@ public class UserModel implements Serializable {
     public void setUser_token(String user_token) {
         this.user_token = user_token;
     }
+
+    public Integer getWin() {
+        return win;
+    }
+
+    public void setWin(Integer win) {
+        this.win = win;
+    }
+
+    public Integer getLose() {
+        return lose;
+    }
+
+    public void setLose(Integer lose) {
+        this.lose = lose;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
 
     /*
     Hash Code and equals

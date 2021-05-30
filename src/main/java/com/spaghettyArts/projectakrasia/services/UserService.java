@@ -116,14 +116,18 @@ public class UserService {
         return repository.save(obj);
     }
 
-    public UserModel changeStats(int id, int life, int money) {
+    public ResponseEntity<Object> changeStats(int id, int life, int money) {
         UserModel obj = findByID(id);
         if (obj == null) {
-            return null;
+            return ResponseEntity.notFound().build();
         }
-        obj.setLife(life);
-        obj.setMoney(money);
-        return repository.save(obj);
+        if (life <= 10 && life > obj.getLife()) {
+            obj.setLife(life);
+            obj.setMoney(money);
+            repository.save(obj);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     public ResponseEntity<Object> gotReward(int id, int reward) {
