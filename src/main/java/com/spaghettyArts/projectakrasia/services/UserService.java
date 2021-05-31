@@ -155,6 +155,7 @@ public class UserService {
             return null;
         }
 
+        obj.setLast_login(new Date());
         obj.setUser_online(0);
         obj.setUser_token(null);
 
