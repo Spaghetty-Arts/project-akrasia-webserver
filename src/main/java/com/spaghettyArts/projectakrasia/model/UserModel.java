@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ *
+ */
 @Entity
 @Table(name = "user")
 public class UserModel implements Serializable {
