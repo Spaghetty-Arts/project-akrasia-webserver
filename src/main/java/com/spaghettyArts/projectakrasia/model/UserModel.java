@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -56,6 +58,9 @@ public class UserModel implements Serializable {
     @Column(name = "rankP", nullable = false)
     private Integer rank;
 
+    @Column(name = "last_action", nullable = false)
+    private Timestamp last_action;
+
     @JsonIgnore
     @OneToOne(mappedBy = "user")
     private ResetModel resetModel;
@@ -80,6 +85,7 @@ public class UserModel implements Serializable {
         this.win = 0;
         this.lose = 0;
         this.rank = 1;
+        last_action = Timestamp.from(ZonedDateTime.now().toInstant());
     }
 
     /*
@@ -205,8 +211,15 @@ public class UserModel implements Serializable {
         this.rank = rank;
     }
 
+    public Timestamp getLast_action() {
+        return last_action;
+    }
 
-    /*
+    public void setLast_action(Timestamp last_action) {
+        this.last_action = last_action;
+    }
+
+/*
     Hash Code and equals
      */
 
