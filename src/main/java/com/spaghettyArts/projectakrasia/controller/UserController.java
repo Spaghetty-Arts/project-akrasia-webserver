@@ -29,8 +29,9 @@ public class UserController {
     }
 
     @PutMapping(value = "/changeName")
-    public ResponseEntity<UserModel> changeName(@RequestBody UserModel user) {
-        if (!service.validateUser(user.getUser_token(), user.getId())) {
+    public ResponseEntity<UserModel> changeName(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
             return ResponseEntity.status(401).build();
         }
         UserModel obj = service.changeName(user.getId(), user.getUsername());
@@ -41,8 +42,12 @@ public class UserController {
     }
 
     @PutMapping(value = "/updateArmor")
-    public ResponseEntity<Object> changeStats(@RequestBody UserModel user) {
-        if (!service.validateUser(user.getUser_token(), user.getId())) {
+    public ResponseEntity<Object> changeStats(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+
+        //System.out.println(header);
+        String auth = header.substring(7);
+
+        if (!service.validateUser(auth, user.getId())) {
             return ResponseEntity.status(401).build();
         }
 
@@ -51,16 +56,18 @@ public class UserController {
 
     //reviewed and good
     @PutMapping(value = "/dailyReward")
-    public ResponseEntity<Object> gotReward(@RequestBody UserModel user) {
-        if (!service.validateUser(user.getUser_token(), user.getId())) {
+    public ResponseEntity<Object> gotReward(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
             return ResponseEntity.status(401).build();
         }
         return service.gotReward(user.getId(), user.getMoney());
     }
 
     @PutMapping(value = "/logout")
-    public ResponseEntity<Object> logout(@RequestBody UserModel user) {
-        if (!service.validateUser(user.getUser_token(), user.getId())) {
+    public ResponseEntity<Object> logout(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
             return ResponseEntity.status(401).build();
         }
         service.logout(user.getId());

@@ -36,7 +36,6 @@ public class AuthController {
         return ResponseEntity.ok().body(obj);
     }
 
-    //good
     @PutMapping(value = "/login")
     public ResponseEntity<UserModel> findPlayer(@RequestBody UserModel user) {
         return service.login(user.getEmail(), user.getPassword());

@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +58,8 @@ public class UserService {
                 obj.setUser_online(1);
                 String token = randomString(60);
                 obj.setUser_token(token);
+
+                obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
 
                 repository.save(obj);
                 return ResponseEntity.ok().body(obj);
@@ -113,6 +117,7 @@ public class UserService {
             return null;
         }
         obj.setUsername(username);
+        obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
         return repository.save(obj);
     }
 
@@ -125,6 +130,7 @@ public class UserService {
             obj.setLife(life);
             obj.setMoney(money);
             obj.setLast_login(new Date());
+            obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
             repository.save(obj);
             return ResponseEntity.ok().build();
         }
@@ -144,6 +150,7 @@ public class UserService {
 
         Date now = new Date();
         obj.setLast_login(now);
+        obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
 
         repository.save(obj);
         return ResponseEntity.ok().build();
