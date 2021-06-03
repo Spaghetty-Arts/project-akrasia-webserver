@@ -3,12 +3,16 @@ package com.spaghettyArts.projectakrasia.services;
 import com.spaghettyArts.projectakrasia.model.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
+/**
+ * O serviço com as funções relativas ao envio de emails
+ * @author Fabian Nunes
+ * @version 0.1
+ */
 @Service
 public class NotificationService {
 
@@ -21,6 +25,12 @@ public class NotificationService {
         this.mailContentBuilder = mailContentBuilder;
     }
 
+    /**
+     * Funçãp para enviar o email relativo ao registo
+     * @param obj Objeto Usermodel que vem do registo e será utilizado para obter o email do user e o nome
+     * @author Fabian Nunes
+     * @version 0.1
+     */
     public void prepareAndSend(UserModel obj) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -37,6 +47,13 @@ public class NotificationService {
         }
     }
 
+    /**
+     * Funçãp para enviar o email relativo ao registo
+     * @param obj Objeto Usermodel que vem do registo e será utilizado para obter o email do user e o nome
+     * @param link String que contém o link para o reset da password
+     * @author Fabian Nunes
+     * @version 0.1
+     */
     public void prepareAndSendReset(UserModel obj, String link) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);

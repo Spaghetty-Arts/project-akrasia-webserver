@@ -10,7 +10,17 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- *
+ * O modelo para o objeto UserModel que representa os elementos na tabela user da base dados.
+ * O objeto possui como parametros: id (Integer id do user), username (string username do user),
+ * password(string password do user) ,email (string email do user), money (Integer dinheiro do user),
+ * armor_level(Integer armadura do user) , last_login (Date data do último login no jogo),
+ * login_reward (Integer número de dias consecutivos de login), got_reward(Integer representa se o user já recebeu
+ * o daily reward), user_online (Integer representa se o user está ativo no jogo), token (string token para validar certos requests),
+ * winP (Integer número de vitórias), loseP (Integer númer de derrotas), rankP (Integer rank do user)
+ * last_action (timestamp hora da última ação realizada pelo user),  resetModel (ResetModel necessário para fazer a ligação das duas tabelas pelo spring)
+ * A classe possui os construtores, getters e setters dos atributos tal como o hash code e equals
+ * @author Fabian Nunes
+ * @version 0.1
  */
 @Entity
 @Table(name = "user")
@@ -76,6 +86,15 @@ public class UserModel implements Serializable {
 
     }
 
+    /**
+     * O construtor do objeto UserModel que é utilizado no registo, serão criados vários parametros default tal como:
+     * dinheiro a 0, armadura a nível 1, ainda não recebeu reward diario (0), o número de logins consecutivos a 0,
+     * o user não está online (0), 0 vitorias e derrotas, rank 1 e a última ação foi no momento atual.
+     * @param username username do utilizador
+     * @param password password do utilizador
+     * @param email email do utilizador
+     * @author Fabian Nunes
+     */
     public UserModel(String username, String password, String email) {
         this.username = username;
         this.password = password;

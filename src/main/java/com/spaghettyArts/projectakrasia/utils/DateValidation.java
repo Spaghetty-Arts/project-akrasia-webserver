@@ -6,8 +6,20 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * Classe relativa a validação de datas
+ * @author Fabian Nunes
+ * @version 0.1
+ */
 public class DateValidation {
 
+    /**
+     * Função para atualizar o timestamp de login do user caso seja um login consecutivo irá atualizar esse dado, caso
+     * não seja volta para 1.
+     * @param obj Objeto Usermodel que vêm do login
+     * @return Irá retornar o objeto que foi recebido como parametro com o login timestamp e reward atualizado
+     * @author Fabian Nunes
+     */
     public static UserModel updateLogin(UserModel obj) {
         Date now = new Date();
 
