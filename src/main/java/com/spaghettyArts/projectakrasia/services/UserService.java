@@ -5,8 +5,10 @@ import com.spaghettyArts.projectakrasia.model.UserModel;
 import com.spaghettyArts.projectakrasia.repository.ResetRepository;
 import com.spaghettyArts.projectakrasia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -19,7 +21,7 @@ import java.util.Optional;
 import static com.spaghettyArts.projectakrasia.utils.DateValidation.updateLogin;
 import static com.spaghettyArts.projectakrasia.utils.Encryption.checkPassword;
 import static com.spaghettyArts.projectakrasia.utils.Encryption.hashPassword;
-import static com.spaghettyArts.projectakrasia.utils.InputValidation.checkEmpty;
+import static com.spaghettyArts.projectakrasia.utils.InputValidation.*;
 import static com.spaghettyArts.projectakrasia.utils.RandomString.randomString;
 
 @Service
@@ -30,10 +32,6 @@ public class UserService {
 
     @Autowired
     private ResetRepository resetRepository;
-
-    public List<UserModel> findAll() {
-        return repository.findAll();
-    }
 
     public UserModel findByID (Integer id) {
         Optional<UserModel> obj =  repository.findById(id);
@@ -75,9 +73,17 @@ public class UserService {
         UserModel objU =  repository.findUserModelByUsername(obj.getUsername());
         UserModel objE =  repository.findUserModelByEmail(obj.getEmail());
         if (objE!= null || objU != null) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         } else {
             String pass = obj.getPassword();
+            if (!checkPasswordInput(pass)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            String username = obj.getUsername();
+            if(!checkUsername(username)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+
             String hash = hashPassword(pass);
             UserModel newUser = new UserModel(obj.getUsername(), hash, obj.getEmail());
             String defaultTime = "1970-01-01";
@@ -92,15 +98,22 @@ public class UserService {
     }
 
     public UserModel reset(String token, String email, String password) {
+
         if (checkEmpty(email) || checkEmpty(password) || checkEmpty(token)) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+
         ResetModel obj = resetRepository.findByTokenAndEmail(token, email);
         if (obj == null) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         } else {
-            resetRepository.delete(obj);
+
             UserModel userObj = repository.findUserModelByEmail(email);
+            if (userObj == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+
+            resetRepository.delete(obj);
             String pass = password;
             String hash = hashPassword(pass);
             userObj.setPassword(hash);
@@ -109,12 +122,19 @@ public class UserService {
     }
 
     public UserModel changeName(int id, String username) {
-        if(checkEmpty(username)) {
-            return null;
+        if(checkEmpty(username) && !checkUsername(username)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+
+        UserModel exist = repository.findUserModelByUsername(username);
+
+        if(exist != null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+
         UserModel obj = findByID(id);
         if (obj == null) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         obj.setUsername(username);
         obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
@@ -159,7 +179,7 @@ public class UserService {
     public UserModel logout(int id) {
         UserModel obj = findByID(id);
         if (obj == null) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
 
         obj.setLast_login(new Date());

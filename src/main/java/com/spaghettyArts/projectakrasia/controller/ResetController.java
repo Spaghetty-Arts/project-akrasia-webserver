@@ -1,10 +1,7 @@
 package com.spaghettyArts.projectakrasia.controller;
 
 import com.spaghettyArts.projectakrasia.model.ResetFormModel;
-import com.spaghettyArts.projectakrasia.model.ResetModel;
 import com.spaghettyArts.projectakrasia.model.UserModel;
-import com.spaghettyArts.projectakrasia.services.NotificationService;
-import com.spaghettyArts.projectakrasia.services.ResetService;
 import com.spaghettyArts.projectakrasia.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,9 +16,6 @@ public class ResetController {
 
     @Autowired
     private UserService service;
-
-    @Autowired
-    private NotificationService mail;
 
 
     @GetMapping("/resetPassword")

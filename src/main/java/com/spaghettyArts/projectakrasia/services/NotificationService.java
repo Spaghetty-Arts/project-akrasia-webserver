@@ -33,7 +33,7 @@ public class NotificationService {
         try {
             mailSender.send(messagePreparator);
         } catch (MailException e) {
-            // runtime exception; compiler will not force you to handle it
+            System.out.println(e);
         }
     }
 
@@ -49,7 +49,7 @@ public class NotificationService {
         try {
             mailSender.send(messagePreparator);
         } catch (MailException e) {
-            // runtime exception; compiler will not force you to handle it
+            System.out.println(e);
         }
     }
 }

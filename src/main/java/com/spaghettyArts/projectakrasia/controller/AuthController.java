@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(path = "/auth")
 public class AuthController {
@@ -24,17 +22,6 @@ public class AuthController {
     @Autowired
     private ResetService reset;
 
-    @GetMapping(path = "/list")
-    public ResponseEntity<List<UserModel>> findAll() {
-        List<UserModel> list = service.findAll();
-        return ResponseEntity.ok().body(list);
-    }
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserModel> findById(@PathVariable Integer id) {
-        UserModel obj = service.findByID(id);
-        return ResponseEntity.ok().body(obj);
-    }
 
     @PutMapping(value = "/login")
     public ResponseEntity<UserModel> findPlayer(@RequestBody UserModel user) {
@@ -42,18 +29,18 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<UserModel> insert(@RequestBody UserModel user) {
+    public ResponseEntity<Object> insert(@RequestBody UserModel user) {
         UserModel obj = service.register(user);
         if (obj == null) {
             return ResponseEntity.status(409).build();
         } else {
             mail.prepareAndSend(obj);
-            return ResponseEntity.ok().body(obj);
+            return ResponseEntity.status(201).build();
         }
     }
 
-    @PostMapping(value = "/reset")
-    public ResponseEntity<ResetModel> sendMail(@RequestParam(value = "email") String email) {
+    @PostMapping(value = "/reset/{email}")
+    public ResponseEntity<ResetModel> sendMail(@PathVariable("email") String email) {
         ResetModel obj = reset.resetRequest(email);
         if (obj == null) {
             return ResponseEntity.status(409).build();
@@ -61,7 +48,7 @@ public class AuthController {
             UserModel user = service.findByMail(email);
             String link = "http://localhost:8080/resetPassword?token=" + obj.getToken();
             mail.prepareAndSendReset(user, link);
-            return ResponseEntity.ok().body(obj);
+            return ResponseEntity.status(201).build();
         }
     }
 

@@ -1,5 +1,6 @@
 package com.spaghettyArts.projectakrasia.utils;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputValidation {
@@ -18,19 +19,11 @@ public class InputValidation {
             return false;
         }
 
-        if (!UpperCasePatten.matcher(password).find()) {
-            return false;
-        }
+        Matcher upperM = UpperCasePatten.matcher(password);
+        Matcher lowerM = lowerCasePatten.matcher(password);
+        Matcher digitM = digitCasePatten.matcher(password);
 
-        if (!lowerCasePatten.matcher(password).find()) {
-            return false;
-        }
-
-        if (!digitCasePatten.matcher(password).find()) {
-            return false;
-        }
-
-        return true;
+        return upperM.find() && lowerM.find() && digitM.find();
     }
 
     public static boolean checkUsername(String username) {

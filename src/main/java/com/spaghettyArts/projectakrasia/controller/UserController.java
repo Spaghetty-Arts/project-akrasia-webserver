@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(path = "/user")
 public class UserController {
@@ -15,21 +13,8 @@ public class UserController {
     @Autowired
     private UserService service;
 
-
-    @GetMapping(path = "/list")
-    public ResponseEntity<List<UserModel>> findAll() {
-        List<UserModel> list = service.findAll();
-        return ResponseEntity.ok().body(list);
-    }
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserModel> findById(@PathVariable Integer id) {
-        UserModel obj = service.findByID(id);
-        return ResponseEntity.ok().body(obj);
-    }
-
     @PutMapping(value = "/changeName")
-    public ResponseEntity<UserModel> changeName(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+    public ResponseEntity<Object> changeName(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
         String auth = header.substring(7);
         if (!service.validateUser(auth, user.getId())) {
             return ResponseEntity.status(401).build();
@@ -38,15 +23,13 @@ public class UserController {
         if (obj == null) {
             return ResponseEntity.status(403).build();
         }
-        return ResponseEntity.ok().body(obj);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/updateArmor")
     public ResponseEntity<Object> changeStats(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
 
-        //System.out.println(header);
         String auth = header.substring(7);
-
         if (!service.validateUser(auth, user.getId())) {
             return ResponseEntity.status(401).build();
         }
@@ -54,7 +37,6 @@ public class UserController {
         return service.changeStats(user.getId(), user.getLife(), user.getMoney());
     }
 
-    //reviewed and good
     @PutMapping(value = "/dailyReward")
     public ResponseEntity<Object> gotReward(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
         String auth = header.substring(7);
