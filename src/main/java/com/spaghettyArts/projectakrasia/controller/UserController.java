@@ -1,16 +1,16 @@
 package com.spaghettyArts.projectakrasia.controller;
 
-import com.spaghettyArts.projectakrasia.model.ResetModel;
 import com.spaghettyArts.projectakrasia.model.UserModel;
-import com.spaghettyArts.projectakrasia.services.NotificationService;
-import com.spaghettyArts.projectakrasia.services.ResetService;
 import com.spaghettyArts.projectakrasia.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+/**
+ * O controller das rotas associadas ao com a alteração de informação do user (/user)
+ * @author Fabian Nunes
+ * @version 0.1
+ */
 @RestController
 @RequestMapping(path = "/user")
 public class UserController {
@@ -18,57 +18,75 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    @Autowired
-    private NotificationService mail;
-
-    @Autowired
-    private ResetService reset;
-
-    @GetMapping(path = "/list")
-    public ResponseEntity<List<UserModel>> findAll() {
-        List<UserModel> list = service.findAll();
-        return ResponseEntity.ok().body(list);
-    }
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserModel> findById(@PathVariable Integer id) {
-        UserModel obj = service.findByID(id);
-        return ResponseEntity.ok().body(obj);
-    }
-
-    @GetMapping(value = "/login")
-    public ResponseEntity<UserModel> findPlayer(@RequestParam(value = "email") String email, @RequestParam(value = "pass") String pass) {
-        UserModel obj = service.login(email, pass);
-        if (obj == null) {
+    /**
+     * A função que irá receber o PUT Request para alterar o username na rota /user/changeName
+     * @param header Esta rota está protegida com um header authrorization que contém uma token, caso essa token não seja igual a que u user tem na base de dados será enviado forbiden 401
+     * @param user O objeto usermodel que possui o id e o username novo do user
+     * @return Irá retornar um código HTTP dependendo do resultado do request, caso seja válido será enviado 201, caso exista um erro será enviado um código erro específico para o cliente
+     * @author Fabian Nunes
+     */
+    @PutMapping(value = "/changeName")
+    public ResponseEntity<Object> changeName(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
             return ResponseEntity.status(401).build();
-        } else {
-            return ResponseEntity.ok().body(obj);
         }
-    }
-
-    @PostMapping(value = "/register")
-    public ResponseEntity<UserModel> insert(@RequestBody UserModel user) {
-        UserModel obj = service.register(user);
+        UserModel obj = service.changeName(user.getId(), user.getUsername());
         if (obj == null) {
-            return ResponseEntity.status(409).build();
-        } else {
-            mail.prepareAndSend(obj);
-            return ResponseEntity.ok().body(obj);
+            return ResponseEntity.status(403).build();
         }
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/reset")
-    public ResponseEntity<ResetModel> sendMail(@RequestParam(value = "email") String email) {
-        ResetModel obj = reset.resetRequest(email);
-        if (obj == null) {
-            return ResponseEntity.status(409).build();
-        } else {
-            UserModel user = service.findByMail(email);
-            String link = "http://localhost:8080/resetPassword?token=" + obj.getToken();
-            //mail.prepareAndSendReset(user, link);
-            return ResponseEntity.ok().body(obj);
+    /**
+     * A função que irá receber o PUT Request para alterar o nível da armadura do user na rota /user/updateArmor
+     * @param header Esta rota está protegida com um header authrorization que contém uma token, caso essa token não seja igual a que u user tem na base de dados será enviado forbiden 401
+     * @param user O objeto usermodel que possui o id, o nível da armadura e o dinheiro do user
+     * @return Irá retornar um código HTTP dependendo do resultado do request, caso seja válido será enviado 201, caso exista um erro será enviado um código erro específico para o cliente
+     * @author Fabian Nunes
+     */
+    @PutMapping(value = "/updateArmor")
+    public ResponseEntity<Object> changeStats(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
+            return ResponseEntity.status(401).build();
         }
+
+        return service.changeStats(user.getId(), user.getLife(), user.getMoney());
     }
 
+    /**
+     * A função que irá receber o PUT Request para o dinheiro por autenticar-se diariamente na rota /user/dailyReward
+     * @param header Esta rota está protegida com um header authrorization que contém uma token, caso essa token não seja igual a que u user tem na base de dados será enviado forbiden 401
+     * @param user O objeto usermodel que possui o id e o dinheiro do user
+     * @return Irá retornar um código HTTP dependendo do resultado do request, caso seja válido será enviado 201, caso exista um erro será enviado um código erro específico para o cliente
+     * @author Fabian Nunes
+     */
+    @PutMapping(value = "/dailyReward")
+    public ResponseEntity<Object> gotReward(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
+            return ResponseEntity.status(401).build();
+        }
+        return service.gotReward(user.getId(), user.getMoney());
+    }
+
+    /**
+     * A função que irá receber o PUT Request para fazer logout na rota /user/logout
+     * @param header Esta rota está protegida com um header authrorization que contém uma token, caso essa token não seja igual a que u user tem na base de dados será enviado forbiden 401
+     * @param user O objeto usermodel que possui o id do user
+     * @return Irá retornar um código HTTP dependendo do resultado do request, caso seja válido será enviado 201, caso exista um erro será enviado um código erro específico para o cliente
+     * @author Fabian Nunes
+     */
+    @PutMapping(value = "/logout")
+    public ResponseEntity<Object> logout(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
+            return ResponseEntity.status(401).build();
+        }
+        service.logout(user.getId());
+        return ResponseEntity.ok().build();
+    }
 
 }

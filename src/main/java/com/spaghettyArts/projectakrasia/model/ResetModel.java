@@ -1,6 +1,5 @@
 package com.spaghettyArts.projectakrasia.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -8,6 +7,13 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+/**
+ * O modelo para o objeto ResetModel que representa os elementos na tabela reset da base dados.
+ * O objeto possui como parametros: id (Integer), email (string), token (string), request_date (timestamp), user (Usermodel foreign key que será o id do user).
+ * A classe possui os construtores, getters e setters dos atributos tal como o hash code e equals
+ * @author Fabian Nunes
+ * @version 0.1
+ */
 @Entity
 @Table(name = "reset")
 public class ResetModel implements Serializable {
