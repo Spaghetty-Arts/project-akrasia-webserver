@@ -89,4 +89,20 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * A função que irá receber o PUT Request para mudar o estado do user
+     * @param header Esta rota está protegida com um header authrorization que contém uma token, caso essa token não seja igual a que u user tem na base de dados será enviado forbiden 401
+     * @param user O objeto usermodel que possui o id do user
+     * @return Irá retornar um código HTTP dependendo do resultado do request, caso seja válido será enviado 201, caso exista um erro será enviado um código erro específico para o cliente
+     * @author Fabian Nunes
+     */
+    @PutMapping(value = "/state")
+    public ResponseEntity<Object> changeState(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
+            return ResponseEntity.status(401).build();
+        }
+        service.changeState(user.getId(), user.getUser_online());
+        return ResponseEntity.ok().build();
+    }
 }

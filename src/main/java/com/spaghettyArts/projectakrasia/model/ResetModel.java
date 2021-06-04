@@ -22,17 +22,17 @@ public class ResetModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public Integer id;
+    private Integer id;
 
     @Column(name = "email", nullable = false, length = 60, unique = true)
-    public String email;
+    private String email;
 
     @Column(name = "token", nullable = false, length = 60, unique = true)
-    public String token;
+    private String token;
 
     @CreationTimestamp
     @Column(name = "request_date")
-    public Timestamp request_date;
+    private Timestamp request_date;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
