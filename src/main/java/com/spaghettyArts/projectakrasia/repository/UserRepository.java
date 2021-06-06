@@ -17,5 +17,4 @@ public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
     UserModel findUserModelByUsername(String user);
 
-    List<UserModel> findAllByUser_online(Integer searching);
 }

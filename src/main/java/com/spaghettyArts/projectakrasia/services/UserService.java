@@ -83,14 +83,18 @@ public class UserService {
             if(checkPassword(password, paswordH)) {
                 UserModel obj = updateLogin(userE);
 
-                obj.setUser_online(1);
-                String token = randomString(60);
-                obj.setUser_token(token);
+                if(obj.getUser_online() == 0) {
+                    obj.setUser_online(1);
+                    String token = randomString(60);
+                    obj.setUser_token(token);
 
-                obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
+                    obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
 
-                repository.save(obj);
-                return ResponseEntity.ok().body(obj);
+                    repository.save(obj);
+                    return ResponseEntity.ok().body(obj);
+                } else {
+                    return ResponseEntity.status(409).build();
+                }
             } else
                 return ResponseEntity.status(403).build();
         } else {
@@ -325,11 +329,13 @@ public class UserService {
      * @author Fabian Nunes
      */
     public UserModel findMatchMaking() {
-        List<UserModel> usersS =  repository.findAllByUser_online(2);
+        List<UserModel> usersS =  repository.findAll();
         int searchId[] = {};
         for (int i = 0; i < usersS.size(); i++){
             UserModel obj = usersS.get(i);
-            searchId[i] = obj.getId();
+            if(obj.getUser_online() == 2) {
+                searchId[i] = obj.getId();
+            }
         }
         Random generator = new Random();
         int randomIndex = generator.nextInt(searchId.length);
