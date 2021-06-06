@@ -4,6 +4,7 @@ import com.spaghettyArts.projectakrasia.model.ResetModel;
 import com.spaghettyArts.projectakrasia.model.UserModel;
 import com.spaghettyArts.projectakrasia.repository.ResetRepository;
 import com.spaghettyArts.projectakrasia.repository.UserRepository;
+import com.spaghettyArts.projectakrasia.utils.Matches;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static com.spaghettyArts.projectakrasia.utils.DateValidation.updateLogin;
 import static com.spaghettyArts.projectakrasia.utils.Encryption.checkPassword;
@@ -80,14 +83,18 @@ public class UserService {
             if(checkPassword(password, paswordH)) {
                 UserModel obj = updateLogin(userE);
 
-                obj.setUser_online(1);
-                String token = randomString(60);
-                obj.setUser_token(token);
+                if(obj.getUser_online() == 0) {
+                    obj.setUser_online(1);
+                    String token = randomString(60);
+                    obj.setUser_token(token);
 
-                obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
+                    obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
 
-                repository.save(obj);
-                return ResponseEntity.ok().body(obj);
+                    repository.save(obj);
+                    return ResponseEntity.ok().body(obj);
+                } else {
+                    return ResponseEntity.status(409).build();
+                }
             } else
                 return ResponseEntity.status(403).build();
         } else {
@@ -296,6 +303,97 @@ public class UserService {
             return false;
         } else {
             return obj.getUser_token().equals(token) && obj.getUser_online() == 1;
+        }
+    }
+
+    /**
+     * Função para obter um user para jogar especifico
+     * @param id id do user
+     * @return Será retornado o objeto caso exista esse user e ele esteja na loby
+     * @author Fabian Nunes
+     */
+    public UserModel getSUser(Integer id) {
+        UserModel obj = findByID(id);
+        if (obj == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        if (obj.getUser_online() == 1) {
+            return obj;
+        }
+        throw new ResponseStatusException(HttpStatus.CONFLICT);
+    }
+
+    /**
+     * Função para obter um user que esteja na waiting list para jogar
+     * @return Será retornado o objeto caso esteja a espera de jogar
+     * @author Fabian Nunes
+     */
+    public UserModel findMatchMaking() {
+        List<UserModel> usersS =  repository.findAll();
+        int searchId[] = {};
+        for (int i = 0; i < usersS.size(); i++){
+            UserModel obj = usersS.get(i);
+            if(obj.getUser_online() == 2) {
+                searchId[i] = obj.getId();
+            }
+        }
+        Random generator = new Random();
+        int randomIndex = generator.nextInt(searchId.length);
+        return findByID(randomIndex);
+    }
+
+    /**
+     * Função para atualizar o resultado de uma partida multiplayer
+     * @param id id do user
+     * @param result Resultado da partida 0 - perda 1- vitoria
+     * @return Será retornado ok se o utilizador existir
+     * @author Fabian Nunes
+     */
+    public ResponseEntity<Object> matchResult(int id, int result) {
+        UserModel obj = findByID(id);
+        if (obj  == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            int win = obj.getWin();
+            int lose = obj.getLose();
+            if(result == 1) {
+                win ++;
+                obj.setWin(win);
+            } else {
+                lose++;
+                obj.setLose(lose);
+            }
+            int rank = Matches.defineRank(lose, win);
+            obj.setRank(rank);
+            obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
+            obj.setLast_login(new Date());
+            obj.setUser_online(1);
+            repository.save(obj);
+            return ResponseEntity.accepted().build();
+        }
+    }
+
+    /**
+     * Função para atualizar o estado do jogador
+     * @param id id do user
+     * @param state Estado do user
+     * @return Será retornado ok se o utilizador existir
+     * @author Fabian Nunes
+     */
+    public ResponseEntity<Object> changeState(int id, int state) {
+        UserModel obj = findByID(id);
+        if (obj == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (state >= 0 && state <= 3) {
+            obj.setUser_online(state);
+            obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
+            obj.setLast_login(new Date());
+            repository.save(obj);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
         }
     }
 }
