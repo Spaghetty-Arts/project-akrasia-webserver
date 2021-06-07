@@ -83,7 +83,7 @@ public class UserService {
             if(checkPassword(password, paswordH)) {
                 UserModel obj = updateLogin(userE);
 
-                if(obj.getUser_online() == 0) {
+                if(obj.getUser_online() == 0 || obj.getUser_online() == 1) {
                     obj.setUser_online(1);
                     String token = randomString(60);
                     obj.setUser_token(token);
