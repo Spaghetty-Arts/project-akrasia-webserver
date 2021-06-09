@@ -226,7 +226,7 @@ public class UserService {
      * o valor de armadura for invalido será enviado um 401
      * @author Fabian Nunes
      */
-    public ResponseEntity<Object> changeStats(int id, int life, int money) {
+    public ResponseEntity<UserModel> changeStats(int id, int life, int money) {
         UserModel obj = findByID(id);
         if (obj == null) {
             return ResponseEntity.notFound().build();
@@ -237,7 +237,7 @@ public class UserService {
             obj.setLast_login(new Date());
             obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
             repository.save(obj);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(obj);
         }
         return ResponseEntity.badRequest().build();
     }
@@ -251,7 +251,7 @@ public class UserService {
      * já tiver recebido vai obter um 403.
      * @author Fabian Nunes
      */
-    public ResponseEntity<Object> gotReward(int id, int reward) {
+    public ResponseEntity<UserModel> gotReward(int id, int reward) {
         UserModel obj = findByID(id);
         if (obj == null) {
             return ResponseEntity.notFound().build();
@@ -267,7 +267,7 @@ public class UserService {
         obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
 
         repository.save(obj);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(obj);
     }
 
     /**
