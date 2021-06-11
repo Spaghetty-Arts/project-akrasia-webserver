@@ -30,8 +30,15 @@ public class CombatController {
      * @return Irá retornar ok e o objeto com as informações do user
      * @author Fabian Nunes
      */
-    @GetMapping(value = "/play/{id}")
-    public ResponseEntity<UserModel> getUser(@PathVariable(name = "id") Integer id) {
+    @GetMapping(value = "/play/{pID}/{id}")
+    public ResponseEntity<UserModel> getUser(@RequestHeader("Authorization") String header, @PathVariable(name = "id") Integer id, @PathVariable(name = "pID") Integer pID) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth,pID)) {
+            return ResponseEntity.status(401).build();
+        }
+        if (pID.equals(id)) {
+            return ResponseEntity.badRequest().build();
+        }
         UserModel obj = service.getSUser(id);
         if (obj != null) {
             return ResponseEntity.ok().body(obj);
@@ -46,7 +53,11 @@ public class CombatController {
      * @author Fabian Nunes
      */
     @GetMapping(value = "/play")
-    public ResponseEntity<UserModel> getRandomUser() {
+    public ResponseEntity<UserModel> getRandomUser(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
+            return ResponseEntity.status(401).build();
+        }
         UserModel obj = service.findMatchMaking();
         if (obj != null) {
             return ResponseEntity.ok().body(obj);

@@ -102,7 +102,7 @@ public class UserController {
         if (!service.validateUser(auth, user.getId())) {
             return ResponseEntity.status(401).build();
         }
-        service.changeState(user.getId(), user.getUser_online());
+        service.changeState(user.getId(), user.getUserOnline());
         return ResponseEntity.ok().build();
     }
 }

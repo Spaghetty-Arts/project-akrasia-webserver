@@ -57,7 +57,7 @@ public class UserModel implements Serializable {
     private Integer got_reward;
 
     @Column(name = "active", nullable = false)
-    private Integer user_online;
+    private Integer userOnline;
 
     @Column(name = "token")
     private String user_token;
@@ -103,7 +103,7 @@ public class UserModel implements Serializable {
         this.life = 1;
         this.got_reward = 0;
         this.login_reward = 0;
-        this.user_online = 0;
+        this.userOnline = 0;
         this.win = 0;
         this.lose = 0;
         this.rank = 1;
@@ -193,12 +193,12 @@ public class UserModel implements Serializable {
         this.got_reward = got_reward;
     }
 
-    public Integer getUser_online() {
-        return user_online;
+    public Integer getUserOnline() {
+        return userOnline;
     }
 
-    public void setUser_online(Integer user_online) {
-        this.user_online = user_online;
+    public void setUserOnline(Integer user_online) {
+        this.userOnline = user_online;
     }
 
     public String getUser_token() {

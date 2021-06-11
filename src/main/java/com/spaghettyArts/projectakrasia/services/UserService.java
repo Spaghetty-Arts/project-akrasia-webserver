@@ -15,10 +15,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static com.spaghettyArts.projectakrasia.utils.DateValidation.updateLogin;
 import static com.spaghettyArts.projectakrasia.utils.Encryption.checkPassword;
@@ -47,8 +44,12 @@ public class UserService {
      * @author Fabian Nunes
      */
     public UserModel findByID (Integer id) {
-        Optional<UserModel> obj =  repository.findById(id);
-        return obj.get();
+        try {
+            Optional<UserModel> obj =  repository.findById(id);
+            return obj.get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     /**
@@ -83,8 +84,8 @@ public class UserService {
             if(checkPassword(password, paswordH)) {
                 UserModel obj = updateLogin(userE);
 
-                if(obj.getUser_online() == 0 || obj.getUser_online() == 1) {
-                    obj.setUser_online(1);
+                if(obj.getUserOnline() == 0 || obj.getUserOnline() == 1) {
+                    obj.setUserOnline(1);
                     String token = randomString(60);
                     obj.setUser_token(token);
 
@@ -284,7 +285,7 @@ public class UserService {
         }
 
         obj.setLast_login(new Date());
-        obj.setUser_online(0);
+        obj.setUserOnline(0);
         obj.setUser_token(null);
 
         return repository.save(obj);
@@ -302,7 +303,7 @@ public class UserService {
         if (obj  == null) {
             return false;
         } else {
-            return obj.getUser_token().equals(token) && obj.getUser_online() == 1;
+            return obj.getUser_token().equals(token) && obj.getUserOnline() == 1;
         }
     }
 
@@ -314,10 +315,11 @@ public class UserService {
      */
     public UserModel getSUser(Integer id) {
         UserModel obj = findByID(id);
+
         if (obj == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        if (obj.getUser_online() == 1) {
+        if (obj.getUserOnline() == 1) {
             return obj;
         }
         throw new ResponseStatusException(HttpStatus.CONFLICT);
@@ -330,16 +332,14 @@ public class UserService {
      */
     public UserModel findMatchMaking() {
         List<UserModel> usersS =  repository.findAll();
-        int searchId[] = {};
+        int[] searchId = new int[usersS.size()];
         for (int i = 0; i < usersS.size(); i++){
             UserModel obj = usersS.get(i);
-            if(obj.getUser_online() == 2) {
-                searchId[i] = obj.getId();
-            }
+            searchId[i] = obj.getId();
         }
         Random generator = new Random();
         int randomIndex = generator.nextInt(searchId.length);
-        return findByID(randomIndex);
+        return findByID(searchId[randomIndex]);
     }
 
     /**
@@ -367,7 +367,7 @@ public class UserService {
             obj.setRank(rank);
             obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
             obj.setLast_login(new Date());
-            obj.setUser_online(1);
+            obj.setUserOnline(1);
             repository.save(obj);
             return ResponseEntity.accepted().build();
         }
@@ -387,7 +387,7 @@ public class UserService {
         }
 
         if (state >= 0 && state <= 3) {
-            obj.setUser_online(state);
+            obj.setUserOnline(state);
             obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
             obj.setLast_login(new Date());
             repository.save(obj);
