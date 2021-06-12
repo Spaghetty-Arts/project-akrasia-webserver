@@ -105,4 +105,10 @@ public class UserController {
         service.changeState(user.getId(), user.getUserOnline());
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping(value = "/info/{id}")
+    public ResponseEntity<UserModel> getInfo(@PathVariable(name = "id") Integer id) {
+        UserModel obj = service.findByID(id);
+        return ResponseEntity.ok().body(obj);
+    }
 }

@@ -92,6 +92,6 @@ public class CombatController {
     @PostMapping("end/{winner}/{loser}")
     public ResponseEntity<Object> endMatch(@PathVariable(name = "winner") Integer winner, @PathVariable(name = "loser") Integer loser) {
         historyService.endMatch(winner, loser);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(201).build();
     }
 }

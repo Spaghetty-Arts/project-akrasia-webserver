@@ -303,6 +303,9 @@ public class UserService {
         if (obj  == null) {
             return false;
         } else {
+            if(obj.getUser_token() == null) {
+                return false;
+            }
             return obj.getUser_token().equals(token) && obj.getUserOnline() == 1;
         }
     }
@@ -369,7 +372,7 @@ public class UserService {
             obj.setLast_login(new Date());
             obj.setUserOnline(1);
             repository.save(obj);
-            return ResponseEntity.accepted().build();
+            return ResponseEntity.ok().build();
         }
     }
 
