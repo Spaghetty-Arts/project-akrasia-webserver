@@ -62,6 +62,8 @@ public class UserService {
         return repository.findUserModelByEmail(mail);
     }
 
+    public UserModel findByUsername (String user) { return repository.findUserModelByUsername(user); }
+
     /**
      * Função que realiza o login do utilizador. Esta função irá analisar se os dados introduzidos são válidos, e depois
      * disso irá procurar por um user com aquele email, se encontrar será confirmada a password e se esta tiver correta
@@ -316,13 +318,21 @@ public class UserService {
      * @return Será retornado o objeto caso exista esse user e ele esteja na loby
      * @author Fabian Nunes
      */
-    public UserModel getSUser(Integer id) {
-        UserModel obj = findByID(id);
+    public UserModel getSUser(String user, Integer myID) {
+        UserModel obj = findByUsername(user);
+        UserModel myObj = findByID(myID);
+
+        if (obj.getId().equals(myID)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
         if (obj == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         if (obj.getUserOnline() == 1) {
+            myObj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
+            myObj.setLast_login(new Date());
+            repository.save(myObj);
             return obj;
         }
         throw new ResponseStatusException(HttpStatus.CONFLICT);
