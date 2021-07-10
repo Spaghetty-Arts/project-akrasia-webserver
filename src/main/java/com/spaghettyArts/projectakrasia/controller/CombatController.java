@@ -1,13 +1,10 @@
 package com.spaghettyArts.projectakrasia.controller;
 
 import com.spaghettyArts.projectakrasia.model.UserModel;
-import com.spaghettyArts.projectakrasia.services.HistoryService;
 import com.spaghettyArts.projectakrasia.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.lang.annotation.Retention;
 
 /**
  * O controller das rotas associadas ao com o combate entre dois jogadores
@@ -21,8 +18,6 @@ public class CombatController {
     @Autowired
     private UserService service;
 
-    @Autowired
-    private HistoryService historyService;
 
     /**
      * A função é o Get Request para obter a informação de um user para jogar
@@ -30,9 +25,13 @@ public class CombatController {
      * @return Irá retornar ok e o objeto com as informações do user
      * @author Fabian Nunes
      */
-    @GetMapping(value = "/play/{id}")
-    public ResponseEntity<UserModel> getUser(@PathVariable(name = "id") Integer id) {
-        UserModel obj = service.getSUser(id);
+    @PutMapping(value = "/play/{id}")
+    public ResponseEntity<UserModel> getUser(@RequestHeader("Authorization") String header, @PathVariable(name = "id") Integer id,  @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth,id)) {
+            return ResponseEntity.status(401).build();
+        }
+        UserModel obj = service.getSUser(user.getUsername(),id);
         if (obj != null) {
             return ResponseEntity.ok().body(obj);
         }
@@ -46,7 +45,11 @@ public class CombatController {
      * @author Fabian Nunes
      */
     @GetMapping(value = "/play")
-    public ResponseEntity<UserModel> getRandomUser() {
+    public ResponseEntity<UserModel> getRandomUser(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
+        String auth = header.substring(7);
+        if (!service.validateUser(auth, user.getId())) {
+            return ResponseEntity.status(401).build();
+        }
         UserModel obj = service.findMatchMaking();
         if (obj != null) {
             return ResponseEntity.ok().body(obj);
@@ -80,7 +83,6 @@ public class CombatController {
      */
     @PostMapping("end/{winner}/{loser}")
     public ResponseEntity<Object> endMatch(@PathVariable(name = "winner") Integer winner, @PathVariable(name = "loser") Integer loser) {
-        historyService.endMatch(winner, loser);
-        return ResponseEntity.ok().build();
+        return service.endMatch(winner, loser);
     }
 }

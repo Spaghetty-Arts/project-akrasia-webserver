@@ -12,9 +12,9 @@ import java.util.List;
  */
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
 
-
     UserModel findUserModelByEmail(String email);
 
     UserModel findUserModelByUsername(String user);
 
+    List<UserModel> findAllByUserOnline(Integer id);
 }

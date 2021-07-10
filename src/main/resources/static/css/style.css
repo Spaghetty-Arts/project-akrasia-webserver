@@ -2,6 +2,10 @@ body, html {
     height: 100%;
 }
 
+p, h2, h3 {
+    color: yellow;
+}
+
 .bg {
     /* The image used */
     background-image: url("https://i.ibb.co/ZGjFTwv/f3e20a888211d7a10c784b5afdacc957.png");
@@ -21,4 +25,85 @@ body, html {
 
     display: flex;
     align-items: center;
+}
+
+
+:root {
+    --glitched-duration: 0.9s;
+    --glitched-long-duration: 3s;
+    --yellow-color: #f9f002;
+    --orange-color: #ff9800;
+    --border-color: #8ae66e;
+    --red-color: #ff003c;
+    --blue-color: #136377;
+    --green-color: #446d44;
+    --purple-color: purple;
+}
+
+body {
+    background-color: var(--yellow-color);
+}
+
+body * {
+    font-family: "Advent Pro", arial;
+}
+
+/* Form fields */
+
+input.cyberpunk{
+    width: calc(100% - 30px);
+    border: 30px solid #000;
+    border-left: 5px solid #000;
+    border-right: 5px solid #000;
+    border-bottom: 15px solid #000;
+    clip-path: polygon(
+            0px 25px,
+            26px 0px,
+            calc(60% - 25px) 0px,
+            60% 25px,
+            100% 25px,
+            100% calc(100% - 10px),
+            calc(100% - 15px) calc(100% - 10px),
+            calc(80% - 10px) calc(100% - 10px),
+            calc(80% - 15px) calc(100% - 0px),
+            10px calc(100% - 0px),
+            0% calc(100% - 10px)
+    );
+    margin-bottom: 10px;
+    padding: 12px;
+}
+
+
+/* Buttons and links */
+
+button.cyberpunk2077 {
+    --background-color: var(--red-color);
+    display: block;
+    border: none;
+    border-radius: 0%;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 15px 55px;
+    margin: 10px;
+    position: relative;
+    color: #fff;
+    border-right: 3px solid var(--border-color);
+    clip-path: polygon(
+            -15px 0%,
+            calc(100% + 15px) 0%,
+            calc(100% + 15px) 100%,
+            20px 100%,
+            -15px calc(100% - 35px)
+    );
+    cursor: pointer;
+    background-color: var(--background-color);
+    outline: none;
+    display: inline-block;
+}
+
+.lol {
+    background-color: rgba(0, 0, 0, .6);
 }
