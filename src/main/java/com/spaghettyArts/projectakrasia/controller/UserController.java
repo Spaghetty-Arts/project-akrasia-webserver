@@ -53,24 +53,9 @@ public class UserController {
             return ResponseEntity.status(401).build();
         }
 
-        return service.changeStats(user.getId(), user.getLife(), user.getMoney());
+        return service.changeStats(user.getId());
     }
 
-    /**
-     * A função que irá receber o PUT Request para o dinheiro por autenticar-se diariamente na rota /user/dailyReward
-     * @param header Esta rota está protegida com um header authrorization que contém uma token, caso essa token não seja igual a que u user tem na base de dados será enviado forbiden 401
-     * @param user O objeto usermodel que possui o id e o dinheiro do user
-     * @return Irá retornar um código HTTP dependendo do resultado do request, caso seja válido será enviado 201, caso exista um erro será enviado um código erro específico para o cliente
-     * @author Fabian Nunes
-     */
-    @PutMapping(value = "/dailyReward")
-    public ResponseEntity<UserModel> gotReward(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
-        String auth = header.substring(7);
-        if (!service.validateUser(auth, user.getId())) {
-            return ResponseEntity.status(401).build();
-        }
-        return service.gotReward(user.getId(), user.getMoney());
-    }
 
     /**
      * A função que irá receber o PUT Request para fazer logout na rota /user/logout
@@ -102,8 +87,7 @@ public class UserController {
         if (!service.validateUser(auth, user.getId())) {
             return ResponseEntity.status(401).build();
         }
-        service.changeState(user.getId(), user.getUserOnline());
-        return ResponseEntity.ok().build();
+        return service.changeState(user.getId(), user.getUserOnline());
     }
 
     @GetMapping(value = "/info/{id}")

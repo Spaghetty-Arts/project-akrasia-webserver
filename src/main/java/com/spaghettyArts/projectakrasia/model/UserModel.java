@@ -86,6 +86,11 @@ public class UserModel implements Serializable {
 
     }
 
+    public UserModel(int id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
     /**
      * O construtor do objeto UserModel que é utilizado no registo, serão criados vários parametros default tal como:
      * dinheiro a 0, armadura a nível 1, ainda não recebeu reward diario (0), o número de logins consecutivos a 0,

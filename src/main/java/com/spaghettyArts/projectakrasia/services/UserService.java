@@ -1,10 +1,13 @@
 package com.spaghettyArts.projectakrasia.services;
 
+import com.spaghettyArts.projectakrasia.model.HistoryModel;
 import com.spaghettyArts.projectakrasia.model.ResetModel;
 import com.spaghettyArts.projectakrasia.model.UserModel;
+import com.spaghettyArts.projectakrasia.repository.HistoryRepository;
 import com.spaghettyArts.projectakrasia.repository.ResetRepository;
 import com.spaghettyArts.projectakrasia.repository.UserRepository;
 import com.spaghettyArts.projectakrasia.utils.Matches;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+import static com.spaghettyArts.projectakrasia.utils.DailyReward.getDaily;
 import static com.spaghettyArts.projectakrasia.utils.DateValidation.updateLogin;
 import static com.spaghettyArts.projectakrasia.utils.Encryption.checkPassword;
 import static com.spaghettyArts.projectakrasia.utils.Encryption.hashPassword;
@@ -36,6 +40,9 @@ public class UserService {
 
     @Autowired
     private ResetRepository resetRepository;
+
+    @Autowired
+    private HistoryRepository historyRepository;
 
     /**
      * Função para obter um user da base dados pelo seu ID
@@ -90,6 +97,11 @@ public class UserService {
                     obj.setUserOnline(1);
                     String token = randomString(60);
                     obj.setUser_token(token);
+
+                    if (obj.getGot_reward() == 0) {
+                        int reward = getDaily(obj.getLogin_reward());
+                        obj.setMoney(obj.getMoney() + reward);
+                    }
 
                     obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
 
@@ -200,7 +212,7 @@ public class UserService {
      * @author Fabian Nunes
      */
     public UserModel changeName(int id, String username) {
-        if(checkEmpty(username) && !checkUsername(username)) {
+        if(checkEmpty(username) || !checkUsername(username)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
@@ -223,18 +235,22 @@ public class UserService {
      * Função para alterar o nível da armadura e dinheiro do user. Será procurado o user pelo ID, caso exista será
      * atualizado o nível da armadura e o dinheiro que possui.
      * @param id id do user
-     * @param life nível novo da armadura
-     * @param money valor modificado do dinheiro
      * @return Será retornado o codigo 200 caso seja validos os dados, se o user na existir sera mandado o 404 e se
      * o valor de armadura for invalido será enviado um 401
      * @author Fabian Nunes
      */
-    public ResponseEntity<UserModel> changeStats(int id, int life, int money) {
+    public ResponseEntity<UserModel> changeStats(int id) {
         UserModel obj = findByID(id);
         if (obj == null) {
             return ResponseEntity.notFound().build();
         }
-        if (life <= 10 && life > obj.getLife()) {
+        int life = obj.getLife();
+        int cost = life * 100;
+        if (life < 10 && obj.getMoney() >= cost) {
+            life++;
+            int money = obj.getMoney() - cost;
+
+
             obj.setLife(life);
             obj.setMoney(money);
             obj.setLast_login(new Date());
@@ -308,13 +324,12 @@ public class UserService {
             if(obj.getUser_token() == null) {
                 return false;
             }
-            return obj.getUser_token().equals(token) && obj.getUserOnline() == 1;
+            return obj.getUser_token().equals(token);
         }
     }
 
     /**
      * Função para obter um user para jogar especifico
-     * @param id id do user
      * @return Será retornado o objeto caso exista esse user e ele esteja na loby
      * @author Fabian Nunes
      */
@@ -322,18 +337,21 @@ public class UserService {
         UserModel obj = findByUsername(user);
         UserModel myObj = findByID(myID);
 
-        if (obj.getId().equals(myID)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
 
         if (obj == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        if (obj.getId().equals(myID)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
         if (obj.getUserOnline() == 1) {
             myObj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
             myObj.setLast_login(new Date());
             repository.save(myObj);
-            return obj;
+
+            return new UserModel(obj.getId(), obj.getUsername());
         }
         throw new ResponseStatusException(HttpStatus.CONFLICT);
     }
@@ -367,6 +385,11 @@ public class UserService {
         if (obj  == null) {
             return ResponseEntity.notFound().build();
         } else {
+
+            if (result != 0 && result != 1) {
+                return ResponseEntity.badRequest().build();
+            }
+
             int win = obj.getWin();
             int lose = obj.getLose();
             if(result == 1) {
@@ -376,6 +399,7 @@ public class UserService {
                 lose++;
                 obj.setLose(lose);
             }
+
             int rank = Matches.defineRank(lose, win);
             obj.setRank(rank);
             obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
@@ -407,6 +431,28 @@ public class UserService {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+
+    /**
+     * A função irá criar guardar o jogo na base de dados
+     * @param winer id do vencedor
+     * @param loser id do perdedor
+     * @author Fabian Nunes
+     * @return
+     */
+    public ResponseEntity<Object> endMatch(int winer, int loser) {
+
+
+        UserModel winner = findByID(winer);
+        UserModel lost = findByID(loser);
+        if (winner == null || lost == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            HistoryModel obj = new HistoryModel(winer, loser);
+            historyRepository.save(obj);
+            return ResponseEntity.status(201).build();
         }
     }
 }

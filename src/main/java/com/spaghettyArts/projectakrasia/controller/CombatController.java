@@ -1,13 +1,10 @@
 package com.spaghettyArts.projectakrasia.controller;
 
 import com.spaghettyArts.projectakrasia.model.UserModel;
-import com.spaghettyArts.projectakrasia.services.HistoryService;
 import com.spaghettyArts.projectakrasia.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.lang.annotation.Retention;
 
 /**
  * O controller das rotas associadas ao com o combate entre dois jogadores
@@ -21,8 +18,6 @@ public class CombatController {
     @Autowired
     private UserService service;
 
-    @Autowired
-    private HistoryService historyService;
 
     /**
      * A função é o Get Request para obter a informação de um user para jogar
@@ -88,7 +83,6 @@ public class CombatController {
      */
     @PostMapping("end/{winner}/{loser}")
     public ResponseEntity<Object> endMatch(@PathVariable(name = "winner") Integer winner, @PathVariable(name = "loser") Integer loser) {
-        historyService.endMatch(winner, loser);
-        return ResponseEntity.status(201).build();
+        return service.endMatch(winner, loser);
     }
 }
