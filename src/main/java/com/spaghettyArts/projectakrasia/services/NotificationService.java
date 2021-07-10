@@ -34,7 +34,7 @@ public class NotificationService {
     public void prepareAndSend(UserModel obj) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom("spaghettiarts.projectakrasia@gmail.com");
+            messageHelper.setFrom("postmaster@sandbox5ab8aff87aea4848813be1678538ae1b.mailgun.org");
             messageHelper.setTo(obj.getEmail());
             messageHelper.setSubject("Registo no multiplayer");
             String content = mailContentBuilder.build(obj.getUsername());
