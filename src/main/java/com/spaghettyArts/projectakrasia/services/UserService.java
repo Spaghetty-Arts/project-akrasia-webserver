@@ -368,6 +368,7 @@ public class UserService {
             if(result == 1) {
                 win ++;
                 obj.setWin(win);
+                obj.setMoney(obj.getMoney() + 100);
             } else {
                 lose++;
                 obj.setLose(lose);
@@ -379,7 +380,7 @@ public class UserService {
             obj.setLast_login(new Date());
             obj.setUserOnline(1);
             repository.save(obj);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(obj);
         }
     }
 
