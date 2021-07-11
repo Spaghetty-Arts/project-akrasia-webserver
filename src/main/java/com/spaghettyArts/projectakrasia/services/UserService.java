@@ -261,33 +261,6 @@ public class UserService {
         return ResponseEntity.badRequest().build();
     }
 
-    /**
-     * Função para obter o daily reward, a função irá ver se o utilizador existe e se já recebeu o reward, senão recebeu
-     * irá receber e a flag será alterada.
-     * @param id id do user
-     * @param reward valor total de dinheiro do user
-     * @return Será retornado o codigo 200 caso seja validos os dados, se o user na existir sera mandado o 404 e se
-     * já tiver recebido vai obter um 403.
-     * @author Fabian Nunes
-     */
-    public ResponseEntity<UserModel> gotReward(int id, int reward) {
-        UserModel obj = findByID(id);
-        if (obj == null) {
-            return ResponseEntity.notFound().build();
-        }
-        if (obj.getGot_reward() == 1) {
-            return ResponseEntity.status(403).build();
-        }
-        obj.setGot_reward(1);
-        obj.setMoney(reward);
-
-        Date now = new Date();
-        obj.setLast_login(now);
-        obj.setLast_action(Timestamp.from(ZonedDateTime.now().toInstant()));
-
-        repository.save(obj);
-        return ResponseEntity.ok().body(obj);
-    }
 
     /**
      * Função para fazer logout, esta função irá atualizar o estado do user e eliminar o token da sesão
