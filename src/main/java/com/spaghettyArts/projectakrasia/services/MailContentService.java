@@ -9,7 +9,7 @@ import org.thymeleaf.context.Context;
 /**
  * O serviço para construir o HTML dos emails
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @Service
 public class MailContentService {
@@ -26,7 +26,6 @@ public class MailContentService {
      * @param message String contendo o nome do user registado
      * @return template html
      * @author Fabian Nunes
-     * @version 0.1
      */
     public String build(String message) {
         Context context = new Context();
@@ -40,7 +39,6 @@ public class MailContentService {
      * @param link String que contém o link para o reset da password
      * @return template html
      * @author Fabian Nunes
-     * @version 0.1
      */
     public String buildReset(String name, String link) {
         Context context = new Context();

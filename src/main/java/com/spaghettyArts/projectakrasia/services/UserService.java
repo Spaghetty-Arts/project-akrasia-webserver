@@ -30,7 +30,7 @@ import static com.spaghettyArts.projectakrasia.utils.RandomString.randomString;
 /**
  * O serviço com as funções relativas ao User
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @Service
 public class UserService {
@@ -329,22 +329,6 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.CONFLICT);
     }
 
-    /**
-     * Função para obter um user que esteja na waiting list para jogar
-     * @return Será retornado o objeto caso esteja a espera de jogar
-     * @author Fabian Nunes
-     */
-    public UserModel findMatchMaking() {
-        List<UserModel> usersS =  repository.findAll();
-        int[] searchId = new int[usersS.size()];
-        for (int i = 0; i < usersS.size(); i++){
-            UserModel obj = usersS.get(i);
-            searchId[i] = obj.getId();
-        }
-        Random generator = new Random();
-        int randomIndex = generator.nextInt(searchId.length);
-        return findByID(searchId[randomIndex]);
-    }
 
     /**
      * Função para atualizar o resultado de uma partida multiplayer

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * O repositório para as querys a tabela reset da base de dados
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 public interface ResetRepository extends JpaRepository<ResetModel, Integer> {
 

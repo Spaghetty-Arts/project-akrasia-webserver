@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * O controller das rotas associadas ao reset da password na Web
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @Controller
 public class ResetController {

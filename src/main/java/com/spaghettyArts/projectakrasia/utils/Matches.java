@@ -3,7 +3,7 @@ package com.spaghettyArts.projectakrasia.utils;
 /**
  * Classe relativa a obtençao do rank do user
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 public class Matches {
 
@@ -13,7 +13,7 @@ public class Matches {
      * @param loses numero de partidas perdidas
      * @param wins numero de partidas ganhas
      * @return rank
-     * @autor Fabian Nunes
+     * @author Fabian Nunes
      */
     public static Integer defineRank(int loses, int wins) {
         int total = loses + wins;

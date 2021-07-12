@@ -12,7 +12,7 @@ import java.util.Objects;
  * O objeto possui como parametros: id (Integer), winer (Integer), loser(Integer), moment (timestamp)
  * A classe possui os construtores, getters e setters dos atributos tal como o hash code e equals
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @Entity
 @Table(name = "history")

@@ -20,7 +20,7 @@ import java.util.Objects;
  * last_action (timestamp hora da última ação realizada pelo user),  resetModel (ResetModel necessário para fazer a ligação das duas tabelas pelo spring)
  * A classe possui os construtores, getters e setters dos atributos tal como o hash code e equals
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @Entity
 @Table(name = "user")

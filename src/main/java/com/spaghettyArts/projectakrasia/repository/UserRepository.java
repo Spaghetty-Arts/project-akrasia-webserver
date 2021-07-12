@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * O repositório para as querys a tabela user da base de dados
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
 

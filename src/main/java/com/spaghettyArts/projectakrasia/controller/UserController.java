@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * O controller das rotas associadas ao com a alteração de informação do user (/user)
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @RestController
 @RequestMapping(path = "/user")
@@ -90,9 +90,4 @@ public class UserController {
         return service.changeState(user.getId(), user.getUserOnline());
     }
 
-    @GetMapping(value = "/info/{id}")
-    public ResponseEntity<UserModel> getInfo(@PathVariable(name = "id") Integer id) {
-        UserModel obj = service.findByID(id);
-        return ResponseEntity.ok().body(obj);
-    }
 }

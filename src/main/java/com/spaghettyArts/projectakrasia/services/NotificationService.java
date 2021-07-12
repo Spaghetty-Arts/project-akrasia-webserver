@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 /**
  * O serviço com as funções relativas ao envio de emails
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @Service
 public class NotificationService {

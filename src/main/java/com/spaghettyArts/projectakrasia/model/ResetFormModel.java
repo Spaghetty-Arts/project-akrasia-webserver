@@ -5,7 +5,7 @@ package com.spaghettyArts.projectakrasia.model;
  * O objeto possui como parametros duas strings email e password.
  * A classe possui getters e setters dos atributos.
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 public class ResetFormModel {
 

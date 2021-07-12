@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * Classe relativa a validação de datas
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 public class DateValidation {
 
