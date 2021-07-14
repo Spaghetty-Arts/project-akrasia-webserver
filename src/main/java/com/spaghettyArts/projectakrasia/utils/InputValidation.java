@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * Classe relativa a validação de Inputs
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 public class InputValidation {
 

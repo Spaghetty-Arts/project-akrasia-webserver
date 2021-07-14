@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * O controller das rotas associadas a autenticação do utilizador (/auth)
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @RestController
 @RequestMapping(path = "/auth")

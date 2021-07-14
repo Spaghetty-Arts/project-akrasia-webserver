@@ -15,7 +15,7 @@ import static com.spaghettyArts.projectakrasia.utils.InputValidation.checkEmpty;
 /**
  * O serviço com as funções relativas ao reset de password
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @Service
 public class ResetService {

@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 /**
  * Classe relativa a geração de tokens
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 public class RandomString {
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

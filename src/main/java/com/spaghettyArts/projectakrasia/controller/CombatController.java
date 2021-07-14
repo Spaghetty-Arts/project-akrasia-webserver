@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * O controller das rotas associadas ao com o combate entre dois jogadores
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 @RestController
 @RequestMapping(path = "/pvp")
@@ -38,24 +38,6 @@ public class CombatController {
         return ResponseEntity.notFound().build();
     }
 
-
-    /**
-     * A função é o Get Request para obter um user para matchmaking
-     * @return Irá retornar ok e o objeto com as informações do user
-     * @author Fabian Nunes
-     */
-    @GetMapping(value = "/play")
-    public ResponseEntity<UserModel> getRandomUser(@RequestHeader("Authorization") String header, @RequestBody UserModel user) {
-        String auth = header.substring(7);
-        if (!service.validateUser(auth, user.getId())) {
-            return ResponseEntity.status(401).build();
-        }
-        UserModel obj = service.findMatchMaking();
-        if (obj != null) {
-            return ResponseEntity.ok().body(obj);
-        }
-        return ResponseEntity.notFound().build();
-    }
 
     /**
      * A função é o PUT que irá atualizar o user com o resultado da partida

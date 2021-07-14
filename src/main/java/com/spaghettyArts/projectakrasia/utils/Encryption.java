@@ -6,7 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
 /**
  * Classe relativa encriptação da password usando BCrypt
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 public class Encryption {
 

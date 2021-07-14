@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * Classe relativa a validação de datas
  * @author Fabian Nunes
- * @version 0.1
+ * @version 1.0
  */
 public class DateValidation {
 
@@ -37,6 +37,7 @@ public class DateValidation {
             obj.setGot_reward(0);
         } else if (dayN - dayO == 0) {
             obj.setLast_login(now);
+            obj.setGot_reward(1);
             return obj;
         } else {
             obj.setLogin_reward(1);
