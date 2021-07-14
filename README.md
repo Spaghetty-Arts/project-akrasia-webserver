@@ -3,7 +3,7 @@
 
 ![Akrasia](https://i.ibb.co/6Rmp13J/Project.png)
 
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE) [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=0.1&x2=0)](https://github.com/Naereen/StrapDown.js)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE) [![GitHub version](https://d25lcipzij17d.cloudfront.net/badge.svg?id=gh&type=6&v=1.0&x2=0)](https://github.com/Naereen/StrapDown.js)
 
 ![JS](https://img.shields.io/badge/java-%23ED8B00.svg?&style=for-the-badge&logo=java&logoColor=white) ![Node](https://img.shields.io/badge/spring-%236DB33F.svg?&style=for-the-badge&logo=spring&logoColor=white) ![Mysql](https://img.shields.io/badge/mysql-%2300f.svg?&style=for-the-badge&logo=mysql&logoColor=white)
 
@@ -38,11 +38,16 @@ No need for instalation just run the aplicattion on your IDE ou run the Jar file
 Version | What's new | Sprint
 ------------ | ------------- | -------------
 0.1 | API Created | 3
+1.0 | API Done | 4
 
 ## Sprint 3
 - Rest API Created
 - Mail Service Created
-   
+
+## Sprint 4
+- Rest API Finalized
+- Integration with Heroku
+
 ## License
 
 This code is open source and was based arroun documentatation an other references so the license is MIT.
