@@ -108,6 +108,8 @@ public class UserService {
                     repository.save(obj);
                     return ResponseEntity.ok().body(obj);
                 } else {
+                    obj.setUserOnline(0);
+                    repository.save(obj);
                     return ResponseEntity.status(409).build();
                 }
             } else
